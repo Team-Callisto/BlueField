@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 // connect to database at europaDB
 // Or, use ours mongodb://europa:europa@ds133331.mlab.com:33331/europa
-var dbURI = 'PUT MONGODB URI HERE...';
+var dbURI = 'mongodb://localhost:27017/bluefield';
 mongoose.connect(dbURI);
 
 var db = mongoose.connection;
