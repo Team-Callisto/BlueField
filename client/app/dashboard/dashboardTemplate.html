@@ -28,6 +28,21 @@ never gonna say goodbye. Never gonna tell a lie and hurt you. -->
         </md-card-header-text>
       </md-card-header>
     </md-card>
+
+    <md-card>
+      <md-card-header>
+        <md-card-header-text>
+          <md-input-container class="md-block">
+            <label>Email to Analyze</label>
+            <textarea ng-model="user.biography" rows="10" md-select-on-focus></textarea>
+          </md-input-container>
+        </md-card-header-text>
+      </md-card-header>
+      <md-card-actions layout="row" layout-align="end center">
+        <md-button>Analyze Tone</md-button>
+      </md-card-actions>
+    </md-card>
+
   </div>
 
   <div flex-gt-md="33" flex="100" flex-order-gt-md="-1" >
@@ -46,6 +61,10 @@ never gonna say goodbye. Never gonna tell a lie and hurt you. -->
 
     <div layout-gt-md="row" flex="100" class="widget-container">
         <calendar-widget flex></calendar-widget>
+    </div>
+
+    <div layout-gt-md="row" flex="100" class="widget-container">
+        <emailTone-widget flex></emailTone-widget>
     </div>
 
   </div>

@@ -5,7 +5,8 @@ angular.module('app.dashboard', [
   'newsWidget',
   'calendarWidget',
   'jobWidget',
-  'tasksWidget'])
+  'tasksWidget',
+  'emailToneWidget'])
 .controller('dashboardController', function dashboardController($scope, Companies, User, Jobs, Tasks){
 
   $scope.getJobs = function() {
