@@ -127,6 +127,36 @@ angular.module('calendarWidget', [])
   }
 })
 ;
+angular.module('emailToneWidget', []);
+
+angular.
+  module('emailToneWidget').
+  component('emailToneWidget', {
+    template:
+    `
+    <md-card id="emailTone-widget" class='widget' layout="row">
+      <div class="profile-img-container">
+        <img class="profile-img" src="{{$ctrl.user.profilePic}}">
+      </div>
+      <div class="profile-data-container">
+        <span class="md-headline">{{$ctrl.user.username}}</span>
+        <p>{{$ctrl.user.city}}, {{$ctrl.user.state}}</p>
+        <p>{{$ctrl.user.email}}</p>
+        <p>Active Applications: {{$ctrl.user.jobs.length}}</p>
+      </div>
+      <!-- <button id="profile-add-job" ng-click="$ctrl.handleAddJobClick()">
+        <md-icon>add</md-icon>Add New Job
+      </button> -->
+    </md-card>
+    `,
+    controller: function($location, User) {
+      User.getAllData().then(data => {
+        this.user = data;
+      });
+    }
+  });
+;
+;
 angular.module('jobWidget', []);
 
 angular.
@@ -640,18 +670,18 @@ angular.
     }
   });
 ;
-
 angular.module('app.dashboard', [
   'ngMaterial',
   'profileWidget',
   'newsWidget',
   'calendarWidget',
   'jobWidget',
-  'tasksWidget'])
-.controller('dashboardController', function dashboardController($scope, Companies, User, Jobs, Tasks){
+  'tasksWidget',
+  'emailToneWidget',
+  'chart.js'])
+.controller('dashboardController', function dashboardController($scope, Companies, User, Jobs, Tasks, Tone){
 
   $scope.getJobs = function() {
-
     Jobs.get()
     .then(function(data) {
       $scope.jobs = data
@@ -686,6 +716,44 @@ angular.module('app.dashboard', [
       return (angular.lowercase(job.company).indexOf(angular.lowercase($scope.search) || '') !== -1 ||
               angular.lowercase(job.position).indexOf(angular.lowercase($scope.search) || '') !== -1);
   };
+
+  $scope.analyzeText = function() {
+    console.log('inside dcontroller')
+    Tone.analyzeTone({ text: $scope.textToAnalyze})
+    .then(function(data) {
+      console.log('double inside controller', data)
+      console.log('typeoff', typeof data);
+      $scope.analyzed = data.document_tone;
+
+      let emotionData = parseToneData('emotion_tone', $scope.analyzed);
+      $scope.emotionToneData = emotionData.scores;
+      $scope.emotionToneLabels = emotionData.toneNames;
+
+      let languageData = parseToneData('language_tone', $scope.analyzed);
+      $scope.languageToneData = languageData.scores;
+      $scope.languageToneLabels = languageData.toneNames;
+
+      let socialData = parseToneData('social_tone', $scope.analyzed);
+      $scope.socialToneData = socialData.scores;
+      $scope.socialToneLabels = socialData.toneNames;
+    })
+  }
+
+  var parseToneData = function(categoryId, data) {
+    let parsed = {
+      scores: [],
+      toneNames: []
+    };
+
+    let category = data.tone_categories.filter(tone => tone.category_id === categoryId)[0];
+    console.log('Category', category);
+    console.log('Category tones', category.tones);
+    category.tones.forEach(tone => {
+      parsed.scores.push(tone.score);
+      parsed.toneNames.push(tone.tone_name);
+    })
+    return parsed;
+  }
 });
 ;
 angular.module('app.input', [
@@ -1103,6 +1171,7 @@ angular.module('app.services', [])
 				data: data
 			})
 			.then(function(res) {
+				console.log('inside tasks', res);
 				return res.data
 			})
 			.catch(function(err) {
@@ -1194,5 +1263,24 @@ angular.module('app.services', [])
     signin: signin,
     logout: logout,
     status: status
+  }
+})
+.factory('Tone', function($http) {
+	console.log('Inside tone factory')
+	return {
+		analyzeTone: function(data) {
+			return $http({
+				method: 'POST',
+				url: '/api/tone',
+				data: data
+			})
+			.then(function(res) {
+				console.log('tone response', res.data);
+				return res.data;
+			})
+			.catch(function(err) {
+				console.log(err)
+			})
+		}
   }
 })
