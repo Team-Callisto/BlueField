@@ -5,6 +5,8 @@ const passport = require('passport');
 const request = require('request');
 
 
+var watson = require('watson-developer-cloud');
+
 // import mongoose models
 const User = require('../db/models/user.js');
 const Task = require('../db/models/task.js');
@@ -472,6 +474,7 @@ module.exports = function(app, express) {
 	  });
 	});
 
+
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//						GlassdoorAPI
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -500,5 +503,31 @@ module.exports = function(app, express) {
 
 	})
 
+
+	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//                    Analyze Tone
+	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	app.post('/api/tone', function(req, res) {
+
+		var tone_analyzer = watson.tone_analyzer({
+		  username: config.apiKeys.watson.tone.username,
+		  password: config.apiKeys.watson.tone.password,
+		  version: 'v3',
+		  version_date: '2016-05-19 '
+		});
+
+		tone_analyzer.tone({ text: req.body.text },
+		  function(err, tone) {
+				console.log('inside watson');
+		    if (err) {
+		      console.log(err);
+		    } else {
+		      console.log(JSON.stringify(tone, null, 2));
+					// res.status(200).send(JSON.stringify(tone, null, 2));
+					res.status(200).json(tone);
+				}
+		});
+	});
 
 };
