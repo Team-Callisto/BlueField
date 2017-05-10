@@ -165,6 +165,7 @@ angular.module('app.services', [])
 				data: data
 			})
 			.then(function(res) {
+				console.log('inside tasks', res);
 				return res.data
 			})
 			.catch(function(err) {
@@ -256,5 +257,24 @@ angular.module('app.services', [])
     signin: signin,
     logout: logout,
     status: status
+  }
+})
+.factory('Tone', function($http) {
+	console.log('Inside tone factory')
+	return {
+		analyzeTone: function(data) {
+			return $http({
+				method: 'POST',
+				url: '/api/tone',
+				data: data
+			})
+			.then(function(res) {
+				console.log('tone response', res.data);
+				return res.data;
+			})
+			.catch(function(err) {
+				console.log(err)
+			})
+		}
   }
 })

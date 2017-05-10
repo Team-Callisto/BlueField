@@ -2,6 +2,8 @@ var db = require('../db/db-config.js');
 var mongoose = require('mongoose');
 var passport = require('passport');
 
+var watson = require('watson-developer-cloud');
+
 // import mongoose models
 var User = require('../db/models/user.js');
 var Task = require('../db/models/task.js');
@@ -467,5 +469,31 @@ module.exports = function(app, express) {
 	  res.status(200).json({
 	    status: true
 	  });
+	});
+
+	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//                    Analyze Tone
+	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	app.post('/api/tone', function(req, res) {
+
+		var tone_analyzer = watson.tone_analyzer({
+		  username: config.apiKeys.watson.tone.username,
+		  password: config.apiKeys.watson.tone.password,
+		  version: 'v3',
+		  version_date: '2016-05-19 '
+		});
+
+		tone_analyzer.tone({ text: req.body.text },
+		  function(err, tone) {
+				console.log('inside watson');
+		    if (err) {
+		      console.log(err);
+		    } else {
+		      console.log(JSON.stringify(tone, null, 2));
+					// res.status(200).send(JSON.stringify(tone, null, 2));
+					res.status(200).json(tone);
+				}
+		});
 	});
 };

@@ -34,13 +34,29 @@ never gonna say goodbye. Never gonna tell a lie and hurt you. -->
         <md-card-header-text>
           <md-input-container class="md-block">
             <label>Email to Analyze</label>
-            <textarea ng-model="user.biography" rows="10" md-select-on-focus></textarea>
+            <textarea ng-model="textToAnalyze" rows="10" md-select-on-focus></textarea>
           </md-input-container>
         </md-card-header-text>
       </md-card-header>
       <md-card-actions layout="row" layout-align="end center">
-        <md-button>Analyze Tone</md-button>
+        <md-button ng-click="analyzeText()">Analyze Tone</md-button>
       </md-card-actions>
+    </md-card>
+
+    <md-card ng-show="analyzed">
+      <md-card-header>
+        <md-card-header-text>
+          <canvas id="emotionTone" class="chart-horizontal-bar"
+            chart-data="[emotionToneData]" chart-labels="emotionToneLabels" >
+          </canvas>
+          <canvas id="languageTone" class="chart-horizontal-bar"
+            chart-data="[languageToneData]" chart-labels="languageToneLabels" >
+          </canvas>
+          <canvas id="socialTone" class="chart chart-radar"
+            chart-data="[socialToneData]" chart-labels="socialToneLabels" >
+          </canvas>
+        </md-card-header-text>
+      </md-card-header>
     </md-card>
 
   </div>
