@@ -18,6 +18,21 @@ never gonna say goodbye. Never gonna tell a lie and hurt you. -->
       </md-input-container>
     </div>
 
+
+    <div layout-margin  flex="100" style="height:90px; background-color:white" layout="center center">
+      <md-input-container flex="85" style="margin:auto">
+        <label>Search For Glassdoor Reviews</label>
+          <md-icon class="material-icons">search</md-icon>
+          <input type="text" ng-model="searchGlassdoor">
+      </md-input-container>
+      <input type="Submit" ng-click="queryGlassdoor()">
+    </div>
+
+
+
+
+
+
     <job-widget flex="100" data="job" ng-repeat="job in jobs | filter: filterJobs" ng-if="jobs.length !== 0"></job-widget>
 
     <md-card ng-if="jobs.length === 0">
@@ -73,15 +88,31 @@ never gonna say goodbye. Never gonna tell a lie and hurt you. -->
 
     <div layout-gt-md="row" flex="100" class="widget-container">
         <tasks-widget flex></tasks-widget>
+
     </div>
 
     <div layout-gt-md="row" flex="100" class="widget-container">
         <calendar-widget flex></calendar-widget>
     </div>
 
+
     <div layout-gt-md="row" flex="100" class="widget-container">
         <emailTone-widget flex></emailTone-widget>
     </div>
+
+    <!-- <div layout-gt-md="66" flex="100" class="widget-container">
+      <md-card class='widget' id='glassDoor-widget' ng-controller="glassdoorController">
+       <form>
+         <ng-input type='text' ng-model="search">company search</ng-input>
+         <ng-input type='submit' ng-click='queryGlassDoor()'></ng-input>
+       </form>
+
+       <div id='displayGlassdoorData'>
+
+       </div>
+      </md-card>
+    </div> -->
+
 
   </div>
 </div>

@@ -5,9 +5,14 @@ angular.module('app.dashboard', [
   'calendarWidget',
   'jobWidget',
   'tasksWidget',
+<<<<<<< HEAD
   'emailToneWidget',
   'chart.js'])
 .controller('dashboardController', function dashboardController($scope, Companies, User, Jobs, Tasks, Tone){
+=======
+  'glassDoorWidget'])
+.controller('dashboardController', function dashboardController($http,$scope, Companies, User, Jobs, Tasks){
+>>>>>>> glassDoor
 
   $scope.getJobs = function() {
     Jobs.get()
@@ -45,6 +50,7 @@ angular.module('app.dashboard', [
               angular.lowercase(job.position).indexOf(angular.lowercase($scope.search) || '') !== -1);
   };
 
+<<<<<<< HEAD
   $scope.analyzeText = function() {
     console.log('inside dcontroller')
     Tone.analyzeTone({ text: $scope.textToAnalyze})
@@ -82,4 +88,20 @@ angular.module('app.dashboard', [
     })
     return parsed;
   }
+=======
+
+  $scope.queryGlassdoor = function(){
+    $http({
+      method: "POST",
+      url: "/api/glassdoor",
+      data : {
+        location : $scope.searchGlassdoor
+      }
+    }).then(function(response){
+      console.log(response)
+    })
+  }
+
+
+>>>>>>> glassDoor
 });
