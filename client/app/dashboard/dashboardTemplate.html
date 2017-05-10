@@ -25,7 +25,13 @@ never gonna say goodbye. Never gonna tell a lie and hurt you. -->
           <md-icon class="material-icons">search</md-icon>
           <input type="text" ng-model="searchGlassdoor">
       </md-input-container>
-      <input type="Submit" ng-click="queryGlassdoor()">
+      <md-button ng-click="queryGlassdoor()">
+        <md-tooltip md-direction="top">Look For Jobs!</md-tooltip>
+        <label class="md-fab md-mini">submit</label>
+      </md-button>
+      <md-card >
+
+      </md-card>
     </div>
 
 

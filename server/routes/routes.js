@@ -4,8 +4,8 @@ const passport = require('passport');
 
 const request = require('request');
 
-
-var watson = require('watson-developer-cloud');
+const bodyparser = require('body-parser');
+const watson = require('watson-developer-cloud');
 
 // import mongoose models
 const User = require('../db/models/user.js');
@@ -17,7 +17,12 @@ const Job = require('../db/models/job.js');
 const rp = require('request-promise');
 const config = require('../config/config.js');
 
+
+
 module.exports = function(app, express) {
+
+app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({extended:true}));
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//                    Users
@@ -489,7 +494,7 @@ module.exports = function(app, express) {
 	     't.p': '150048',
 	     't.k': 'iwOrsG2XdTk',
 	     action: 'employers',
-	     q: '\'software engineer\'',
+	     q: '\'meetup\'',
 	     userip: '192.168.43.42',
 	     useragent: 'Mozilla//4.0',
 	     city: '\'new york\'' }
@@ -497,8 +502,11 @@ module.exports = function(app, express) {
 
 	request(options, function (error, response, body) {
 	  if (error) throw new Error(error);
+		var test = JSON.parse(body)
+		console.log(test.response.employers);
 
-	  console.log(body);
+		// console.log("I am the body from request! "+ body['success']);
+    // console.log(response.body);
 	});
 
 	})
