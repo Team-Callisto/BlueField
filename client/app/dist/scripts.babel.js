@@ -115,6 +115,37 @@ angular.module('calendarWidget', []).component('calendarWidget', {
     };
   }
 });
+angular.module('glassDoorWidget', []);
+
+angular.module('glassDoorWidget')
+
+// .component('glassDoorWidget',{
+//
+//   template : `
+//
+//    <md-card class='widget' id='glassDoor-widget' >
+//     <div class='glass-view'></div>
+//    </md-card>
+//
+//   `,
+//   controller : function($scope){
+//
+//   }
+// })
+
+
+.controller('glassdoorController', function ($http, $scope) {
+  $scope.search = "";
+  $scope.queryGlassdoor = function () {
+    $http({
+      method: "POST",
+      url: "/api/glassdoor",
+      data: {
+        location: $scope.search
+      }
+    });
+  };
+});
 angular.module('jobWidget', []);
 
 angular.module('jobWidget').component('jobWidget', {
@@ -346,7 +377,7 @@ angular.module('tasksWidget').component('tasksWidget', {
 });
 ;
 
-angular.module('app.dashboard', ['ngMaterial', 'profileWidget', 'newsWidget', 'calendarWidget', 'jobWidget', 'tasksWidget']).controller('dashboardController', function dashboardController($scope, Companies, User, Jobs, Tasks) {
+angular.module('app.dashboard', ['ngMaterial', 'profileWidget', 'newsWidget', 'calendarWidget', 'jobWidget', 'tasksWidget', 'glassDoorWidget']).controller('dashboardController', function dashboardController($http, $scope, Companies, User, Jobs, Tasks) {
 
   $scope.getJobs = function () {
 
@@ -378,6 +409,18 @@ angular.module('app.dashboard', ['ngMaterial', 'profileWidget', 'newsWidget', 'c
 
   $scope.filterJobs = function (job) {
     return angular.lowercase(job.company).indexOf(angular.lowercase($scope.search) || '') !== -1 || angular.lowercase(job.position).indexOf(angular.lowercase($scope.search) || '') !== -1;
+  };
+
+  $scope.queryGlassdoor = function () {
+    $http({
+      method: "POST",
+      url: "/api/glassdoor",
+      data: {
+        location: $scope.searchGlassdoor
+      }
+    }).then(function (response) {
+      console.log(response);
+    });
   };
 });
 ;
