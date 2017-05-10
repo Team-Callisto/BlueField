@@ -117,6 +117,39 @@ angular.module('calendarWidget', []).component('calendarWidget', {
     };
   }
 });
+
+angular.module('glassDoorWidget', []);
+
+angular.module('glassDoorWidget')
+
+// .component('glassDoorWidget',{
+//
+//   template : `
+//
+//    <md-card class='widget' id='glassDoor-widget' >
+//     <div class='glass-view'></div>
+//    </md-card>
+//
+//   `,
+//   controller : function($scope){
+//
+//   }
+// })
+
+
+.controller('glassdoorController', function ($http, $scope) {
+  $scope.search = "";
+  $scope.queryGlassdoor = function () {
+    $http({
+      method: "POST",
+      url: "/api/glassdoor",
+      data: {
+        location: $scope.search
+      }
+    });
+  };
+});
+
 angular.module('emailToneWidget', []);
 
 angular.module('emailToneWidget').component('emailToneWidget', {
@@ -130,7 +163,7 @@ angular.module('emailToneWidget').component('emailToneWidget', {
   }
 });
 ;
-;
+
 angular.module('jobWidget', []);
 
 angular.module('jobWidget').component('jobWidget', {
@@ -361,7 +394,9 @@ angular.module('tasksWidget').component('tasksWidget', {
   }
 });
 ;
+
 angular.module('app.dashboard', ['ngMaterial', 'profileWidget', 'newsWidget', 'calendarWidget', 'jobWidget', 'tasksWidget', 'emailToneWidget', 'chart.js']).controller('dashboardController', function dashboardController($scope, Companies, User, Jobs, Tasks, Tone) {
+
 
   $scope.getJobs = function () {
     Jobs.get().then(function (data) {
@@ -393,6 +428,18 @@ angular.module('app.dashboard', ['ngMaterial', 'profileWidget', 'newsWidget', 'c
   $scope.filterJobs = function (job) {
     return angular.lowercase(job.company).indexOf(angular.lowercase($scope.search) || '') !== -1 || angular.lowercase(job.position).indexOf(angular.lowercase($scope.search) || '') !== -1;
   };
+
+
+  $scope.queryGlassdoor = function () {
+    $http({
+      method: "POST",
+      url: "/api/glassdoor",
+      data: {
+        location: $scope.searchGlassdoor
+      }
+    }).then(function (response) {
+      console.log(response);
+    });
 
   $scope.analyzeText = function () {
     console.log('inside dcontroller');
@@ -431,6 +478,7 @@ angular.module('app.dashboard', ['ngMaterial', 'profileWidget', 'newsWidget', 'c
       parsed.toneNames.push(tone.tone_name);
     });
     return parsed;
+
   };
 });
 ;

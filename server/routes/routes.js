@@ -1,15 +1,18 @@
-var db = require('../db/db-config.js');
-var mongoose = require('mongoose');
-var passport = require('passport');
+const db = require('../db/db-config.js');
+const mongoose = require('mongoose');
+const passport = require('passport');
+
+const request = require('request');
+
 
 var watson = require('watson-developer-cloud');
 
 // import mongoose models
-var User = require('../db/models/user.js');
-var Task = require('../db/models/task.js');
-var Step = require('../db/models/step.js');
-var Contact = require('../db/models/contact.js');
-var Job = require('../db/models/job.js');
+const User = require('../db/models/user.js');
+const Task = require('../db/models/task.js');
+const Step = require('../db/models/step.js');
+const Contact = require('../db/models/contact.js');
+const Job = require('../db/models/job.js');
 
 const rp = require('request-promise');
 const config = require('../config/config.js');
@@ -471,6 +474,36 @@ module.exports = function(app, express) {
 	  });
 	});
 
+
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//						GlassdoorAPI
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	app.post('/api/glassdoor',function(req,res) {
+		var options = {
+			method: 'GET',
+	  url: 'http://api.glassdoor.com/api/api.htm',
+	  qs:
+	   { v: '1',
+	     format: 'json',
+	     't.p': '150048',
+	     't.k': 'iwOrsG2XdTk',
+	     action: 'employers',
+	     q: '\'software engineer\'',
+	     userip: '192.168.43.42',
+	     useragent: 'Mozilla//4.0',
+	     city: '\'new york\'' }
+		  };
+
+	request(options, function (error, response, body) {
+	  if (error) throw new Error(error);
+
+	  console.log(body);
+	});
+
+	})
+
+
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//                    Analyze Tone
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -496,4 +529,5 @@ module.exports = function(app, express) {
 				}
 		});
 	});
+
 };
