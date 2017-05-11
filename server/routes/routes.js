@@ -484,7 +484,8 @@ app.use(bodyparser.urlencoded({extended:true}));
 	//						GlassdoorAPI
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-	app.post('/api/glassdoor',function(req,res) {
+	app.post('/api/glassdoor', function(req,res) {
+		// console.log("I AM REQUEST INSIDE POST REQUEST TO SERVER" + JSON.stringify(req));
 		var options = {
 			method: 'GET',
 	  url: 'http://api.glassdoor.com/api/api.htm',
@@ -494,19 +495,19 @@ app.use(bodyparser.urlencoded({extended:true}));
 	     't.p': '150048',
 	     't.k': 'iwOrsG2XdTk',
 	     action: 'employers',
-	     q: '\'meetup\'',
-	     userip: '192.168.43.42',
+	     q: "meetup",
+       userip: '192.168.43.42',
 	     useragent: 'Mozilla//4.0',
 	     city: '\'new york\'' }
 		  };
 
 	request(options, function (error, response, body) {
 	  if (error) throw new Error(error);
-		var test = JSON.parse(body)
-		console.log(test.response.employers);
 
-		// console.log("I am the body from request! "+ body['success']);
-    // console.log(response.body);
+	  let parsedBody = JSON.parse(body);
+    console.log(parsedBody.response.employers);
+		res.send(parsedBody.response.employers);
+
 	});
 
 	})

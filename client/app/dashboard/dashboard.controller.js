@@ -47,16 +47,19 @@ angular.module('app.dashboard', [
               angular.lowercase(job.position).indexOf(angular.lowercase($scope.search) || '') !== -1);
   };
 
-
+  $scope.reviews;
   $scope.queryGlassdoor = function(){
     $http({
       method: "POST",
       url: "/api/glassdoor",
       data : {
-        location : $scope.searchGlassdoor
+        q : $scope.searchGlassdoor
       }
     }).then(function(response){
-       console.log("I am the response from queryGlassdoor! " + response.employers)
+
+      console.log(response.data);
+      $scope.reviews = response.data;
+
     })
   };
 

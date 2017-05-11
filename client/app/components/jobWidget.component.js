@@ -54,6 +54,7 @@ angular.
             <p class="md-subhead"><strong>Description: </strong>{{$ctrl.data.description}}</p>
             <p class="md-subhead"><strong>Founded: </strong>{{$ctrl.data.founded}}</p>
             <p class="md-subhead"><strong># of Employees: </strong>{{$ctrl.data.approxEmployees}}</p>
+            <p class="md-subhead"><strong>Featured Review: </strong></p><br><a href='https://www.glassdoor.com/index.htm'>powered by <img src='https://www.glassdoor.com/static/img/api/glassdoor_logo_80.png' title='Job Search' /></a>
             <p class="md-subhead"><strong>Address: </strong>{{$ctrl.data.address}}</p>
             </md-content>
           </md-tab>
