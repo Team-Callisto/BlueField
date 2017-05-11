@@ -613,6 +613,7 @@ angular.module('app.services', []).factory('Companies', function ($http) {
           domain: companyUrl
         }
       }).then(function (res) {
+        console.log('this is res form database: ', res.data);
         return res.data;
       }).catch(function (err) {
         console.log(err);
@@ -661,6 +662,7 @@ angular.module('app.services', []).factory('Companies', function ($http) {
         method: 'GET',
         url: 'api/users'
       }).then(function (res) {
+        console.log('user data: ', res.data);
         return res.data;
       }).catch(function (err) {
         console.log(err);
@@ -673,6 +675,7 @@ angular.module('app.services', []).factory('Companies', function ($http) {
         url: 'api/users',
         data: data
       }).then(function (res) {
+        console.log('user data: ', res.data);
         return res.data;
       }).catch(function (err) {
         console.log(err);
@@ -691,6 +694,7 @@ angular.module('app.services', []).factory('Companies', function ($http) {
         method: 'GET',
         url: 'api/companies'
       }).then(function (res) {
+        console.log('companies', res.data);
         return res.data;
       }).catch(function (err) {
         console.log(err);
@@ -715,6 +719,7 @@ angular.module('app.services', []).factory('Companies', function ($http) {
         method: 'GET',
         url: 'api/jobs'
       }).then(function (res) {
+        console.log("jobs: ", res.data);
         return res.data;
       }).catch(function (err) {
         console.log(err);
@@ -766,6 +771,7 @@ angular.module('app.services', []).factory('Companies', function ($http) {
         method: 'GET',
         url: 'api/tasks'
       }).then(function (res) {
+        console.log('tasks: ', res.data);
         return res.data;
       }).catch(function (err) {
         console.log(err);
