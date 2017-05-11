@@ -40,28 +40,44 @@ module.exports = function(grunt) {
     },
 
     babel: {
-		options: {
-			sourceMap: true,
-			presets: ['es2015']
-		},
-		scripts: {
-			files: {
-				'client/app/dist/scripts.babel.js': ['client/app/dist/scripts.concat.js']
-			}
-		}
-	}
+  		options: {
+  			sourceMap: true,
+  			presets: ['es2015']
+  		},
+  		scripts: {
+  			files: {
+  				'client/app/dist/scripts.babel.js': ['client/app/dist/scripts.concat.js']
+  			}
+  		}
+	  },
+
+    watch: {
+      files: [
+        'client/app/app.js',
+        'client/app/components/*.js',
+        'client/app/dashboard/*.js',
+        'client/app/input/*.js',
+        'client/app/landing/*.js',
+        'client/app/services/*.js'
+      ],
+      tasks: ['concat'],
+    },
   })
+
 
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-babel');
   grunt.loadNpmTasks('babel-preset-es2015');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   grunt.registerTask('build', [
     'concat',
     'babel',
-    // 'uglify',
-    // 'cssmin'
+    'uglify',
+    'cssmin'
   ])
+
+  grunt.registerTask('start', ['watch'])
 };

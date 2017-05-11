@@ -135,6 +135,7 @@ angular.
     template:
     `
     <md-card>
+
       <md-card-header>
         <md-card-header-text>
           <md-input-container class="md-block">
