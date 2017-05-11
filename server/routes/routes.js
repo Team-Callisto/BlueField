@@ -4,8 +4,8 @@ const passport = require('passport');
 
 const request = require('request');
 
-
-var watson = require('watson-developer-cloud');
+const bodyparser = require('body-parser');
+const watson = require('watson-developer-cloud');
 
 // import mongoose models
 const User = require('../db/models/user.js');
@@ -17,7 +17,12 @@ const Job = require('../db/models/job.js');
 const rp = require('request-promise');
 const config = require('../config/config.js');
 
+
+
 module.exports = function(app, express) {
+
+app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({extended:true}));
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//                    Users
@@ -474,36 +479,6 @@ module.exports = function(app, express) {
 	  });
 	});
 
-
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	//						GlassdoorAPI
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-	app.post('/api/glassdoor',function(req,res) {
-		var options = {
-			method: 'GET',
-	  url: 'http://api.glassdoor.com/api/api.htm',
-	  qs:
-	   { v: '1',
-	     format: 'json',
-	     't.p': '150048',
-	     't.k': 'iwOrsG2XdTk',
-	     action: 'employers',
-	     q: '\'software engineer\'',
-	     userip: '192.168.43.42',
-	     useragent: 'Mozilla//4.0',
-	     city: '\'new york\'' }
-		  };
-
-	request(options, function (error, response, body) {
-	  if (error) throw new Error(error);
-
-	  console.log(body);
-	});
-
-	})
-
-
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//                    Analyze Tone
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -529,5 +504,38 @@ module.exports = function(app, express) {
 				}
 		});
 	});
+
+
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//						GlassdoorAPI
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+	app.post('/api/glassdoor', function(req,res) {
+		// console.log("I AM REQUEST INSIDE POST REQUEST TO SERVER" + JSON.stringify(req));
+		var options = {
+			method: 'GET',
+	  url: 'http://api.glassdoor.com/api/api.htm',
+	  qs:
+	   { v: '1',
+	     format: 'json',
+	     't.p': '150048',
+	     't.k': 'iwOrsG2XdTk',
+	     action: 'employers',
+	     q: "meetup",
+       userip: '192.168.43.42',
+	     useragent: 'Mozilla//4.0',
+	     city: '\'new york\'' }
+		  };
+
+	request(options, function (error, response, body) {
+	  if (error) throw new Error(error);
+
+	  let parsedBody = JSON.parse(body);
+    console.log(parsedBody.response.employers);
+		res.send(parsedBody.response.employers);
+
+	});
+
+	})
 
 };
