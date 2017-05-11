@@ -709,10 +709,9 @@ angular.module('app.dashboard', [
   'calendarWidget',
   'jobWidget',
   'tasksWidget',
-
   'emailToneWidget',
   'chart.js'])
-.controller('dashboardController', function dashboardController($http, $scope, Companies, User, Jobs, Tasks, Tone){
+.controller('dashboardController', function dashboardController($scope, Companies, User, Jobs, Tasks, Tone){
 
 
   $scope.getJobs = function() {
@@ -766,7 +765,6 @@ angular.module('app.dashboard', [
 
     })
   };
-
 
   $scope.analyzeText = function() {
     console.log('inside dcontroller')

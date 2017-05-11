@@ -391,7 +391,7 @@ angular.module('tasksWidget').component('tasksWidget', {
   }
 });
 ;
-angular.module('app.dashboard', ['ngMaterial', 'profileWidget', 'newsWidget', 'calendarWidget', 'jobWidget', 'tasksWidget', 'emailToneWidget', 'chart.js']).controller('dashboardController', function dashboardController($http, $scope, Companies, User, Jobs, Tasks, Tone) {
+angular.module('app.dashboard', ['ngMaterial', 'profileWidget', 'newsWidget', 'calendarWidget', 'jobWidget', 'tasksWidget', 'emailToneWidget', 'chart.js']).controller('dashboardController', function dashboardController($scope, Companies, User, Jobs, Tasks, Tone) {
 
   $scope.getJobs = function () {
     Jobs.get().then(function (data) {
