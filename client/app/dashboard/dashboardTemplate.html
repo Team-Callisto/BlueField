@@ -30,21 +30,12 @@ never gonna say goodbye. Never gonna tell a lie and hurt you. -->
         <md-tooltip md-direction="top">Look For Jobs!</md-tooltip>
         <label class="md-fab md-mini">submit</label>
       </md-button>
-      <md-card >
-
-      </md-card>
     </div>
 
-      <input type="Submit" ng-click="queryGlassdoor()">
-
-
-    </div>
 
     <div ng-model="reviews" layout-margin  flex="100" style="height:90px; background-color:white" layout="center center">
       <h3>Featured Review:</h3><br />{{reviews[0].featuredReview.pros}}
     </div>
-
-
 
 
     <job-widget flex="100" data="job" ng-repeat="job in jobs | filter: filterJobs" ng-if="jobs.length !== 0"></job-widget>
@@ -58,35 +49,7 @@ never gonna say goodbye. Never gonna tell a lie and hurt you. -->
       </md-card-header>
     </md-card>
 
-    <md-card>
-      <md-card-header>
-        <md-card-header-text>
-          <md-input-container class="md-block">
-            <label>Email to Analyze</label>
-            <textarea ng-model="textToAnalyze" rows="10" md-select-on-focus></textarea>
-          </md-input-container>
-        </md-card-header-text>
-      </md-card-header>
-      <md-card-actions layout="row" layout-align="end center">
-        <md-button ng-click="analyzeText()">Analyze Tone</md-button>
-      </md-card-actions>
-    </md-card>
-
-    <md-card ng-show="analyzed">
-      <md-card-header>
-        <md-card-header-text>
-          <canvas id="emotionTone" class="chart-horizontal-bar"
-            chart-data="[emotionToneData]" chart-labels="emotionToneLabels" >
-          </canvas>
-          <canvas id="languageTone" class="chart-horizontal-bar"
-            chart-data="[languageToneData]" chart-labels="languageToneLabels" >
-          </canvas>
-          <canvas id="socialTone" class="chart chart-radar"
-            chart-data="[socialToneData]" chart-labels="socialToneLabels" >
-          </canvas>
-        </md-card-header-text>
-      </md-card-header>
-    </md-card>
+    <email-tone-widget flex="100"></email-tone-widget>
 
   </div>
 
@@ -109,14 +72,6 @@ never gonna say goodbye. Never gonna tell a lie and hurt you. -->
         <calendar-widget flex></calendar-widget>
     </div>
 
-
-<<<<<<< HEAD
-=======
-    <div layout-gt-md="row" flex="100" class="widget-container">
-        <emailTone-widget flex></emailTone-widget>
-    </div>
-
->>>>>>> refs/remotes/origin/dev
     <!-- <div layout-gt-md="66" flex="100" class="widget-container">
       <md-card class='widget' id='glassDoor-widget' ng-controller="glassdoorController">
        <form>
@@ -129,14 +84,6 @@ never gonna say goodbye. Never gonna tell a lie and hurt you. -->
        </div>
       </md-card>
     </div> -->
-
-<<<<<<< HEAD
-    <div layout-gt-md="row" flex="100" class="widget-container">
-        <emailTone-widget flex></emailTone-widget>
-    </div>
-
-=======
->>>>>>> refs/remotes/origin/dev
 
   </div>
 </div>
