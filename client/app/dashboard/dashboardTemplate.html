@@ -26,9 +26,12 @@ never gonna say goodbye. Never gonna tell a lie and hurt you. -->
           <input type="text" ng-model="searchGlassdoor">
       </md-input-container>
       <input type="Submit" ng-click="queryGlassdoor()">
+
     </div>
 
-
+    <div ng-model="reviews" layout-margin  flex="100" style="height:90px; background-color:white" layout="center center">
+      <h3>Featured Review:</h3><br />{{reviews[0].featuredReview.pros}}
+    </div>
 
 
 

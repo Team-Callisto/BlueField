@@ -8,7 +8,7 @@ angular.module('app.dashboard', [
 
   'emailToneWidget',
   'chart.js'])
-.controller('dashboardController', function dashboardController($scope, Companies, User, Jobs, Tasks, Tone){
+.controller('dashboardController', function dashboardController($http, $scope, Companies, User, Jobs, Tasks, Tone){
 
 
   $scope.getJobs = function() {
@@ -47,16 +47,17 @@ angular.module('app.dashboard', [
               angular.lowercase(job.position).indexOf(angular.lowercase($scope.search) || '') !== -1);
   };
 
-
+  $scope.reviews; 
   $scope.queryGlassdoor = function(){
     $http({
       method: "POST",
       url: "/api/glassdoor",
       data : {
-        location : $scope.searchGlassdoor
+        q : $scope.searchGlassdoor
       }
     }).then(function(response){
-      console.log(response)
+      console.log(response.data);
+      $scope.reviews = response.data;
     })
   }
 

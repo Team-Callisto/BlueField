@@ -479,7 +479,8 @@ module.exports = function(app, express) {
 	//						GlassdoorAPI
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-	app.post('/api/glassdoor',function(req,res) {
+	app.post('/api/glassdoor', function(req,res) {
+		// console.log("I AM REQUEST INSIDE POST REQUEST TO SERVER" + JSON.stringify(req));
 		var options = {
 			method: 'GET',
 	  url: 'http://api.glassdoor.com/api/api.htm',
@@ -489,7 +490,7 @@ module.exports = function(app, express) {
 	     't.p': '150048',
 	     't.k': 'iwOrsG2XdTk',
 	     action: 'employers',
-	     q: '\'software engineer\'',
+	     q: "meetup",
 	     userip: '192.168.43.42',
 	     useragent: 'Mozilla//4.0',
 	     city: '\'new york\'' }
@@ -497,8 +498,9 @@ module.exports = function(app, express) {
 
 	request(options, function (error, response, body) {
 	  if (error) throw new Error(error);
-
-	  console.log(body);
+	  let parsedBody = JSON.parse(body);
+    console.log(parsedBody.response.employers);
+		res.send(parsedBody.response.employers);
 	});
 
 	})

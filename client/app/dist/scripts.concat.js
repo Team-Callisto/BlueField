@@ -127,7 +127,35 @@ angular.module('calendarWidget', [])
   }
 })
 ;
+angular.module('emailToneWidget', []);
 
+angular.
+  module('emailToneWidget').
+  component('emailToneWidget', {
+    template:
+    `
+    <md-card id="emailTone-widget" class='widget' layout="row">
+      <div class="profile-img-container">
+        <img class="profile-img" src="{{$ctrl.user.profilePic}}">
+      </div>
+      <div class="profile-data-container">
+        <span class="md-headline">{{$ctrl.user.username}}</span>
+        <p>{{$ctrl.user.city}}, {{$ctrl.user.state}}</p>
+        <p>{{$ctrl.user.email}}</p>
+        <p>Active Applications: {{$ctrl.user.jobs.length}}</p>
+      </div>
+      <!-- <button id="profile-add-job" ng-click="$ctrl.handleAddJobClick()">
+        <md-icon>add</md-icon>Add New Job
+      </button> -->
+    </md-card>
+    `,
+    controller: function($location, User) {
+      User.getAllData().then(data => {
+        this.user = data;
+      });
+    }
+  });
+;
 angular.module('glassDoorWidget',[]);
 
 angular.module('glassDoorWidget')
@@ -159,38 +187,7 @@ angular.module('glassDoorWidget')
     })
   };
 })
-
-angular.module('emailToneWidget', []);
-
-angular.
-  module('emailToneWidget').
-  component('emailToneWidget', {
-    template:
-    `
-    <md-card id="emailTone-widget" class='widget' layout="row">
-      <div class="profile-img-container">
-        <img class="profile-img" src="{{$ctrl.user.profilePic}}">
-      </div>
-      <div class="profile-data-container">
-        <span class="md-headline">{{$ctrl.user.username}}</span>
-        <p>{{$ctrl.user.city}}, {{$ctrl.user.state}}</p>
-        <p>{{$ctrl.user.email}}</p>
-        <p>Active Applications: {{$ctrl.user.jobs.length}}</p>
-      </div>
-      <!-- <button id="profile-add-job" ng-click="$ctrl.handleAddJobClick()">
-        <md-icon>add</md-icon>Add New Job
-      </button> -->
-    </md-card>
-    `,
-    controller: function($location, User) {
-      User.getAllData().then(data => {
-        this.user = data;
-      });
-    }
-  });
 ;
-
-
 angular.module('jobWidget', []);
 
 angular.
@@ -247,6 +244,7 @@ angular.
             <p class="md-subhead"><strong>Description: </strong>{{$ctrl.data.description}}</p>
             <p class="md-subhead"><strong>Founded: </strong>{{$ctrl.data.founded}}</p>
             <p class="md-subhead"><strong># of Employees: </strong>{{$ctrl.data.approxEmployees}}</p>
+            <p class="md-subhead"><strong>Featured Review:</strong><a href='https://www.glassdoor.com/index.htm'>powered by <img src='https://www.glassdoor.com/static/img/api/glassdoor_logo_80.png' title='Job Search' /></a></p>
             <p class="md-subhead"><strong>Address: </strong>{{$ctrl.data.address}}</p>
             </md-content>
           </md-tab>
@@ -711,6 +709,7 @@ angular.module('app.dashboard', [
   'calendarWidget',
   'jobWidget',
   'tasksWidget',
+
   'emailToneWidget',
   'chart.js'])
 .controller('dashboardController', function dashboardController($http, $scope, Companies, User, Jobs, Tasks, Tone){
@@ -752,20 +751,19 @@ angular.module('app.dashboard', [
               angular.lowercase(job.position).indexOf(angular.lowercase($scope.search) || '') !== -1);
   };
 
-
-
+  $scope.reviews; 
   $scope.queryGlassdoor = function(){
     $http({
       method: "POST",
       url: "/api/glassdoor",
       data : {
-        location : $scope.searchGlassdoor
+        q : $scope.searchGlassdoor
       }
     }).then(function(response){
-      console.log(response)
+      console.log(response.data);
+      $scope.reviews = response.data;
     })
   }
-
 
 
   $scope.analyzeText = function() {
