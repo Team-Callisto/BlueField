@@ -28,24 +28,6 @@ never gonna say goodbye. Never gonna tell a lie and hurt you. -->
       </md-card-header>
     </md-card>
 
-    <md-card>
-      <md-card-header>
-        <md-card-header-text>
-          <md-input-container class="md-block">
-            <label>Email to Analyze</label>
-            <textarea ng-model="textToAnalyze" rows="10" md-select-on-focus></textarea>
-          </md-input-container>
-        </md-card-header-text>
-      </md-card-header>
-      <md-card-actions layout="row" layout-align="end center">
-        <md-button ng-click="analyzeText()">Analyze Tone</md-button>
-      </md-card-actions>
-    </md-card>
-
-
-    <div layout-gt-md="row" flex="100" class="widget-container">
-        <emailTone-widget flex></emailTone-widget>
-    </div>
   </div>
 
   <div flex-gt-sm="33" flex-gt-xs="40" flex="100" flex-order-gt-xs="-1" >
@@ -70,10 +52,6 @@ never gonna say goodbye. Never gonna tell a lie and hurt you. -->
 
     <div layout-gt-sm="row" flex="100" class="widget-container">
         <news-widget flex></news-widget>
-    </div>
-
-    <div layout-gt-md="row" flex="100" class="widget-container">
-        <emailTone-widget flex></emailTone-widget>
     </div>
   </div>
 </div>

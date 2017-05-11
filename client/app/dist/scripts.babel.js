@@ -117,7 +117,54 @@ angular.module('calendarWidget', []).component('calendarWidget', {
     };
   }
 });
+angular.module('emailToneWidget', []);
 
+angular.module('emailToneWidget').component('emailToneWidget', {
+  template: '\n    <md-card>\n      <md-card-header>\n        <md-card-header-text>\n          <md-input-container class="md-block">\n            <label>Email to Analyze</label>\n            <textarea ng-model="textToAnalyze" rows="10" md-select-on-focus></textarea>\n          </md-input-container>\n        </md-card-header-text>\n      </md-card-header>\n      <md-card-actions layout="row" layout-align="end center">\n        <md-button ng-click="analyzeText()">Analyze Tone</md-button>\n      </md-card-actions>\n    </md-card>\n\n    <md-card ng-show="analyzed">\n      <md-card-header>\n        <md-card-header-text>\n          <canvas id="emotionTone" class="chart-horizontal-bar"\n            chart-data="[emotionToneData]" chart-labels="emotionToneLabels" >\n          </canvas>\n          <canvas id="languageTone" class="chart-horizontal-bar"\n            chart-data="[languageToneData]" chart-labels="languageToneLabels" >\n          </canvas>\n          <canvas id="socialTone" class="chart chart-radar"\n            chart-data="[socialToneData]" chart-labels="socialToneLabels" >\n          </canvas>\n        </md-card-header-text>\n      </md-card-header>\n    </md-card>\n    ',
+  controller: function controller($scope, Tone) {
+    console.log('hello tone widge');
+
+    $scope.analyzeText = function () {
+      console.log('inside dcontroller');
+      Tone.analyzeTone({ text: $scope.textToAnalyze }).then(function (data) {
+        console.log('double inside controller', data);
+        console.log('typeoff', typeof data === 'undefined' ? 'undefined' : _typeof(data));
+        $scope.analyzed = data.document_tone;
+
+        var emotionData = parseToneData('emotion_tone', $scope.analyzed);
+        $scope.emotionToneData = emotionData.scores;
+        $scope.emotionToneLabels = emotionData.toneNames;
+
+        var languageData = parseToneData('language_tone', $scope.analyzed);
+        $scope.languageToneData = languageData.scores;
+        $scope.languageToneLabels = languageData.toneNames;
+
+        var socialData = parseToneData('social_tone', $scope.analyzed);
+        $scope.socialToneData = socialData.scores;
+        $scope.socialToneLabels = socialData.toneNames;
+      });
+    };
+
+    var parseToneData = function parseToneData(categoryId, data) {
+      var parsed = {
+        scores: [],
+        toneNames: []
+      };
+
+      var category = data.tone_categories.filter(function (tone) {
+        return tone.category_id === categoryId;
+      })[0];
+      console.log('Category', category);
+      console.log('Category tones', category.tones);
+      category.tones.forEach(function (tone) {
+        parsed.scores.push(tone.score);
+        parsed.toneNames.push(tone.tone_name);
+      });
+      return parsed;
+    };
+  }
+});
+;
 angular.module('glassDoorWidget', []);
 
 angular.module('glassDoorWidget')
@@ -149,21 +196,6 @@ angular.module('glassDoorWidget')
     });
   };
 });
-
-angular.module('emailToneWidget', []);
-
-angular.module('emailToneWidget').component('emailToneWidget', {
-  template: '\n    <md-card id="emailTone-widget" class=\'widget\' layout="row">\n      <div class="profile-img-container">\n        <img class="profile-img" src="{{$ctrl.user.profilePic}}">\n      </div>\n      <div class="profile-data-container">\n        <span class="md-headline">{{$ctrl.user.username}}</span>\n        <p>{{$ctrl.user.city}}, {{$ctrl.user.state}}</p>\n        <p>{{$ctrl.user.email}}</p>\n        <p>Active Applications: {{$ctrl.user.jobs.length}}</p>\n      </div>\n      <!-- <button id="profile-add-job" ng-click="$ctrl.handleAddJobClick()">\n        <md-icon>add</md-icon>Add New Job\n      </button> -->\n    </md-card>\n    ',
-  controller: function controller($location, User) {
-    var _this = this;
-
-    User.getAllData().then(function (data) {
-      _this.user = data;
-    });
-  }
-});
-;
-
 angular.module('jobWidget', []);
 
 angular.module('jobWidget').component('jobWidget', {
@@ -316,10 +348,10 @@ angular.module('profileWidget', []);
 angular.module('profileWidget').component('profileWidget', {
   template: '\n    <md-card id="profile-widget" class=\'widget\' layout="row">\n      <div class="profile-img-container">\n        <img class="profile-img" src="{{$ctrl.user.profilePic}}">\n      </div>\n      <div class="profile-data-container">\n        <span class="md-headline">{{$ctrl.user.username}}</span>\n        <p>{{$ctrl.user.city}}, {{$ctrl.user.state}}</p>\n        <p>{{$ctrl.user.email}}</p>\n        <p>Active Applications: {{$ctrl.user.jobs.length}}</p>\n      </div>\n      <!-- <button id="profile-add-job" ng-click="$ctrl.handleAddJobClick()">\n        <md-icon>add</md-icon>Add New Job\n      </button> -->\n    </md-card>\n    ',
   controller: function controller($location, User) {
-    var _this2 = this;
+    var _this = this;
 
     User.getAllData().then(function (data) {
-      _this2.user = data;
+      _this.user = data;
     });
   }
 
@@ -332,36 +364,36 @@ angular.module('tasksWidget').component('tasksWidget', {
   controller: function controller($log, Tasks) {
 
     this.getTasks = function () {
-      var _this3 = this;
+      var _this2 = this;
 
       Tasks.get().then(function (data) {
-        _this3.tasksList = data || [];
+        _this2.tasksList = data || [];
       });
     };
     this.getTasks();
 
     this.createTask = function (name) {
-      var _this4 = this;
+      var _this3 = this;
 
       if (name && name.length > 0) {
         Tasks.create({ name: name }).then(function (res) {
-          _this4.getTasks();
+          _this3.getTasks();
         });
       }
     };
 
     this.deleteTask = function (id) {
-      var _this5 = this;
+      var _this4 = this;
 
       var query = JSON.stringify({ _id: id });
 
       Tasks.delete(query).then(function (res) {
-        _this5.getTasks();
+        _this4.getTasks();
       });
     };
 
     this.updateTask = function (id, name, completed) {
-      var _this6 = this;
+      var _this5 = this;
 
       var query = { _id: id };
       if (name) {
@@ -374,7 +406,7 @@ angular.module('tasksWidget').component('tasksWidget', {
       query = JSON.stringify(query);
 
       Tasks.update(query).then(function (res) {
-        _this6.getTasks();
+        _this5.getTasks();
       });
     };
 
@@ -383,20 +415,18 @@ angular.module('tasksWidget').component('tasksWidget', {
     };
 
     this.deleteAllCompleted = function () {
-      var _this7 = this;
+      var _this6 = this;
 
       this.tasksList.forEach(function (task) {
         if (task.completed) {
-          _this7.deleteTask(task._id);
+          _this6.deleteTask(task._id);
         }
       });
     };
   }
 });
 ;
-
 angular.module('app.dashboard', ['ngMaterial', 'profileWidget', 'newsWidget', 'calendarWidget', 'jobWidget', 'tasksWidget', 'emailToneWidget', 'chart.js']).controller('dashboardController', function dashboardController($scope, Companies, User, Jobs, Tasks, Tone) {
-
 
   $scope.getJobs = function () {
     Jobs.get().then(function (data) {
@@ -429,7 +459,6 @@ angular.module('app.dashboard', ['ngMaterial', 'profileWidget', 'newsWidget', 'c
     return angular.lowercase(job.company).indexOf(angular.lowercase($scope.search) || '') !== -1 || angular.lowercase(job.position).indexOf(angular.lowercase($scope.search) || '') !== -1;
   };
 
-
   $scope.queryGlassdoor = function () {
     $http({
       method: "POST",
@@ -440,45 +469,6 @@ angular.module('app.dashboard', ['ngMaterial', 'profileWidget', 'newsWidget', 'c
     }).then(function (response) {
       console.log(response);
     });
-
-  $scope.analyzeText = function () {
-    console.log('inside dcontroller');
-    Tone.analyzeTone({ text: $scope.textToAnalyze }).then(function (data) {
-      console.log('double inside controller', data);
-      console.log('typeoff', typeof data === 'undefined' ? 'undefined' : _typeof(data));
-      $scope.analyzed = data.document_tone;
-
-      var emotionData = parseToneData('emotion_tone', $scope.analyzed);
-      $scope.emotionToneData = emotionData.scores;
-      $scope.emotionToneLabels = emotionData.toneNames;
-
-      var languageData = parseToneData('language_tone', $scope.analyzed);
-      $scope.languageToneData = languageData.scores;
-      $scope.languageToneLabels = languageData.toneNames;
-
-      var socialData = parseToneData('social_tone', $scope.analyzed);
-      $scope.socialToneData = socialData.scores;
-      $scope.socialToneLabels = socialData.toneNames;
-    });
-  };
-
-  var parseToneData = function parseToneData(categoryId, data) {
-    var parsed = {
-      scores: [],
-      toneNames: []
-    };
-
-    var category = data.tone_categories.filter(function (tone) {
-      return tone.category_id === categoryId;
-    })[0];
-    console.log('Category', category);
-    console.log('Category tones', category.tones);
-    category.tones.forEach(function (tone) {
-      parsed.scores.push(tone.score);
-      parsed.toneNames.push(tone.tone_name);
-    });
-    return parsed;
-
   };
 });
 ;
