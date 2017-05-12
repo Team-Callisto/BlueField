@@ -35,7 +35,7 @@ never gonna say goodbye. Never gonna tell a lie and hurt you. -->
     <div ng-model="reviews" layout-margin  flex="100" style="height:90px; background-color:white" layout="center center">
       <h3>Featured Review:</h3><br />{{reviews[0].featuredReview.pros}}
     </div>
-
+    <map-widget flex="100"></map-widget>
     <job-widget flex="100" data="job" ng-repeat="job in jobs | filter: filterJobs" ng-if="jobs.length !== 0"></job-widget>
 
     <md-card ng-if="jobs.length === 0">

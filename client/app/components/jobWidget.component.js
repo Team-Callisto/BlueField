@@ -57,9 +57,7 @@ angular.
             <p class="md-subhead"><strong># of Employees: </strong>{{$ctrl.data.approxEmployees}}</p>
             <p class="md-subhead"><strong>Featured Review: </strong></p><br><a href='https://www.glassdoor.com/index.htm'>powered by <img src='https://www.glassdoor.com/static/img/api/glassdoor_logo_80.png' title='Job Search' /></a>
             <p class="md-subhead" ><strong>Address: </strong>{{$ctrl.data.address}}</p>
-            <md-button ng-click="$ctrl.googleMap($ctrl.data.address, $ctrl.data.officialName)"></md-button>
-            <p id="map" style="width: 800px; height: 600px"></p> 
-            
+            <md-button ng-click="$ctrl.googleMap($ctrl.data.address, $ctrl.data.officialName)">Show Map</md-button>
             </md-content>
           </md-tab>
 
@@ -101,7 +99,7 @@ angular.
     bindings: {
      data: '='
     },
-    controller: function($window, $scope, $route, $mdDialog, Jobs, GoogleMap) {
+    controller: function($window, $scope, $route, $mdDialog, Jobs, GoogleMap, $rootScope) {
       // favorite icon
       this.favorite = false;
 
@@ -150,6 +148,9 @@ angular.
       // }
 
       this.googleMap = function(address, companyName) {
+        $rootScope.displayMapFunc();
+        window.scrollTo(0,400);
+        console.log('insideGoogleMap scope', $rootScope.showMapComp)
         GoogleMap.getLocationCode(address)
         .then(function(data){
           console.log(data);

@@ -298,9 +298,7 @@ angular.
             <p class="md-subhead"><strong># of Employees: </strong>{{$ctrl.data.approxEmployees}}</p>
             <p class="md-subhead"><strong>Featured Review: </strong></p><br><a href='https://www.glassdoor.com/index.htm'>powered by <img src='https://www.glassdoor.com/static/img/api/glassdoor_logo_80.png' title='Job Search' /></a>
             <p class="md-subhead" ><strong>Address: </strong>{{$ctrl.data.address}}</p>
-            <md-button ng-click="$ctrl.googleMap($ctrl.data.address, $ctrl.data.officialName)"></md-button>
-            <p id="map" style="width: 800px; height: 600px"></p> 
-            
+            <md-button ng-click="$ctrl.googleMap($ctrl.data.address, $ctrl.data.officialName)">Show Map</md-button>
             </md-content>
           </md-tab>
 
@@ -342,7 +340,7 @@ angular.
     bindings: {
      data: '='
     },
-    controller: function($window, $scope, $route, $mdDialog, Jobs, GoogleMap) {
+    controller: function($window, $scope, $route, $mdDialog, Jobs, GoogleMap, $rootScope) {
       // favorite icon
       this.favorite = false;
 
@@ -391,6 +389,9 @@ angular.
       // }
 
       this.googleMap = function(address, companyName) {
+        $rootScope.displayMapFunc();
+        window.scrollTo(0,400);
+        console.log('insideGoogleMap scope', $rootScope.showMapComp)
         GoogleMap.getLocationCode(address)
         .then(function(data){
           console.log(data);
@@ -572,6 +573,37 @@ angular.
             }
           }
         })
+      }
+    }
+  });
+;
+angular.module('mapWidget', []);
+
+angular.
+  module('mapWidget').
+  component('mapWidget', {
+    template:
+    `
+    <md-card ng-show="displayMap">
+      <md-card-header>
+        <md-card-header-text>
+          Company Location
+        </md-card-header-text>
+      </md-card-header>
+      <md-card-content>
+        <p id="map" style="width: 800px; height: 600px"></p>
+      </md-card-content>
+      <md-card-actions layout="row" layout-align="end center">
+        <md-button ng-click="analyzeText()">Direction</md-button>
+      </md-card-actions>
+    </md-card>
+    `,
+    binding: {
+      data: '='
+    },
+    controller: function($scope, $rootScope) {
+      $rootScope.displayMapFunc = function() {
+        $scope.displayMap = true;
       }
     }
   });
@@ -811,6 +843,7 @@ angular.module('app.dashboard', [
   'jobWidget',
   'tasksWidget',
   'emailToneWidget',
+  'mapWidget',
   'chart.js'])
 .controller('dashboardController', function dashboardController($scope, Companies, User, Jobs, Tasks, Tone){
 
