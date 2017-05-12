@@ -286,6 +286,7 @@ angular.
               <p class="md-subhead"><strong>Current Step: </strong>{{$ctrl.data.currentStep.name}}</p>
               <p class="md-subhead"><strong>Next Step: </strong>{{$ctrl.data.nextStep.name}}</p>
               <p class="md-subhead"><strong>Salary: </strong>\${{$ctrl.data.salary}}</p>
+              <p id="map_canvas" style="float:left;width:70%; height:100%"></p>
           </md-content>
           </md-tab>
 
@@ -297,7 +298,10 @@ angular.
             <p class="md-subhead"><strong>Founded: </strong>{{$ctrl.data.founded}}</p>
             <p class="md-subhead"><strong># of Employees: </strong>{{$ctrl.data.approxEmployees}}</p>
             <p class="md-subhead"><strong>Featured Review: </strong></p><br><a href='https://www.glassdoor.com/index.htm'>powered by <img src='https://www.glassdoor.com/static/img/api/glassdoor_logo_80.png' title='Job Search' /></a>
-            <p class="md-subhead"><strong>Address: </strong>{{$ctrl.data.address}}</p>
+            <p class="md-subhead" ><strong>Address: </strong>{{$ctrl.data.address}}</p>
+            <md-button ng-click="$ctrl.googleMap($ctrl.data.address, $ctrl.data.officialName)"></md-button>
+            <p id="map" style="width: 800px; height: 600px"></p> 
+            
             </md-content>
           </md-tab>
 
@@ -339,7 +343,7 @@ angular.
     bindings: {
      data: '='
     },
-    controller: function($window, $scope, $route, $mdDialog, Jobs) {
+    controller: function($window, $scope, $route, $mdDialog, Jobs, GoogleMap) {
       // favorite icon
       this.favorite = false;
 
@@ -383,6 +387,52 @@ angular.
           })
         }
       }
+      // this.googleMap = function() {
+        
+      // }
+
+      this.googleMap = function(address, companyName) {
+        GoogleMap.getLocationCode(address)
+        .then(function(data){
+          console.log(data);
+          var mapProp = {
+          center:data,
+          zoom:12,
+          mapTypeId:google.maps.MapTypeId.ROADMAP
+          };
+          var map=new google.maps.Map(document.getElementById("map"),mapProp);
+          var marker=new google.maps.Marker({
+            position:data,
+            });
+          marker.setMap(map);
+          var infoWindow = new google.maps.InfoWindow({ 
+            content: companyName
+            }); 
+          infoWindow.open(map, marker); 
+          
+        })
+        .catch(function(err) {
+          console.log(err);
+        })
+      }
+
+      // function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+      //   infoWindow.setPosition(pos);
+      //   infoWindow.setContent(browserHasGeolocation ?
+      //                         'Error: The Geolocation service failed.' :
+      //                         'Error: Your browser doesn\'t support geolocation.');
+      // }
+
+
+
+
+
+
+
+
+
+
+
 
       this.editJob = function($event) {
         var parentEl = angular.element(document.body)
@@ -1080,7 +1130,27 @@ angular.module('app.services', [])
 				}
 			})
 			.then(function(res) {
+				console.log('this is res form database: ', res.data);
 				return res.data;
+			})
+			.catch(function(err) {
+				console.log(err)
+			})
+		}
+  }
+})
+.factory('GoogleMap', function($http) {
+	return {
+		getLocationCode: function(address) {
+			console.log('This is the address: ', address);
+			return $http({
+				method: 'POST',
+				url: '/api/companyMap',
+				data: {data: address}
+			})
+			.then(function(res) {
+				console.log('this is res form GoogleMapApi: ', res.data.results[0].geometry.location);
+				return res.data.results[0].geometry.location;
 			})
 			.catch(function(err) {
 				console.log(err)
@@ -1122,6 +1192,7 @@ angular.module('app.services', [])
 				url: 'api/users',
 			})
 			.then(function(res) {
+				console.log('user data: ', res.data);
 				return res.data
 			})
 			.catch(function(err) {
@@ -1136,6 +1207,7 @@ angular.module('app.services', [])
 				data: data
 			})
 			.then(function(res) {
+				console.log('user data: ', res.data);
 				return res.data;
 			})
 			.catch(function(err) {
@@ -1157,6 +1229,7 @@ angular.module('app.services', [])
 				url: 'api/companies'
 			})
 			.then(function(res) {
+				console.log('companies', res.data);
 				return res.data;
 			})
 			.catch(function(err) {
@@ -1187,6 +1260,7 @@ angular.module('app.services', [])
 				url: 'api/jobs',
 			})
 			.then(function(res) {
+				console.log("jobs: ", res.data);
 				return res.data
 			})
 			.catch(function(err) {
@@ -1247,6 +1321,7 @@ angular.module('app.services', [])
 				url: 'api/tasks',
 			})
 			.then(function(res) {
+				console.log('tasks: ', res.data);
 				return res.data
 			})
 			.catch(function(err) {

@@ -11,7 +11,27 @@ angular.module('app.services', [])
 				}
 			})
 			.then(function(res) {
+				console.log('this is res form database: ', res.data);
 				return res.data;
+			})
+			.catch(function(err) {
+				console.log(err)
+			})
+		}
+  }
+})
+.factory('GoogleMap', function($http) {
+	return {
+		getLocationCode: function(address) {
+			console.log('This is the address: ', address);
+			return $http({
+				method: 'POST',
+				url: '/api/companyMap',
+				data: {data: address}
+			})
+			.then(function(res) {
+				console.log('this is res form GoogleMapApi: ', res.data.results[0].geometry.location);
+				return res.data.results[0].geometry.location;
 			})
 			.catch(function(err) {
 				console.log(err)
@@ -53,6 +73,7 @@ angular.module('app.services', [])
 				url: 'api/users',
 			})
 			.then(function(res) {
+				console.log('user data: ', res.data);
 				return res.data
 			})
 			.catch(function(err) {
@@ -67,6 +88,7 @@ angular.module('app.services', [])
 				data: data
 			})
 			.then(function(res) {
+				console.log('user data: ', res.data);
 				return res.data;
 			})
 			.catch(function(err) {
@@ -88,6 +110,7 @@ angular.module('app.services', [])
 				url: 'api/companies'
 			})
 			.then(function(res) {
+				console.log('companies', res.data);
 				return res.data;
 			})
 			.catch(function(err) {
@@ -118,6 +141,7 @@ angular.module('app.services', [])
 				url: 'api/jobs',
 			})
 			.then(function(res) {
+				console.log("jobs: ", res.data);
 				return res.data
 			})
 			.catch(function(err) {
@@ -178,6 +202,7 @@ angular.module('app.services', [])
 				url: 'api/tasks',
 			})
 			.then(function(res) {
+				console.log('tasks: ', res.data);
 				return res.data
 			})
 			.catch(function(err) {
