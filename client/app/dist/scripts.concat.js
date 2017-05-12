@@ -300,8 +300,8 @@ angular.
             <p class="md-subhead"><strong>Featured Review: </strong></p><br><a href='https://www.glassdoor.com/index.htm'>powered by <img src='https://www.glassdoor.com/static/img/api/glassdoor_logo_80.png' title='Job Search' /></a>
             <md-button ng-click="$ctrl.queryGlassdoor()">Submit</md-button>
             <p class="md-subhead" ><strong>Address: </strong>{{$ctrl.data.address}}</p>
-            <md-button ng-click="$ctrl.googleMap($ctrl.data.address, $ctrl.data.officialName)"></md-button>
-            <p id="map" style="width: 800px; height: 600px"></p>
+
+            <p class="md-subhead" ng-init="$ctrl.googleMap($ctrl.data.address, $ctrl.data.officialName)" id="map" style="width: 800px; height: 600px"></p> 
 
             </md-content>
           </md-tab>
@@ -344,7 +344,12 @@ angular.
     bindings: {
      data: '='
     },
+
     controller: function($window, $scope, $http, $route, $mdDialog, Jobs, GoogleMap) {
+
+
+      let state;
+
       // favorite icon
 
 
@@ -393,22 +398,24 @@ angular.
           })
         }
       }
-      // this.googleMap = function() {
 
-      // }
 
+
+      ////////////////////Google Map///////////////////////////////////////////
       this.googleMap = function(address, companyName) {
         GoogleMap.getLocationCode(address)
         .then(function(data){
-          console.log(data);
+          console.log("Received geometry data from client server: ", data.results[0].geometry.location);
+          console.log("Received state name from client server: ", data.results[0].address_components[5].long_name);
+          state = data.results[0].address_components[5];
           var mapProp = {
-          center:data,
+          center:data.results[0].geometry.location,
           zoom:12,
           mapTypeId:google.maps.MapTypeId.ROADMAP
           };
           var map=new google.maps.Map(document.getElementById("map"),mapProp);
           var marker=new google.maps.Marker({
-            position:data,
+            position:data.results[0].geometry.location,
             });
           marker.setMap(map);
           var infoWindow = new google.maps.InfoWindow({
@@ -421,6 +428,7 @@ angular.
           console.log(err);
         })
       }
+
 
       // function handleLocationError(browserHasGeolocation, infoWindow, pos) {
       //   infoWindow.setPosition(pos);
@@ -436,7 +444,6 @@ angular.
             q : $scope.searchGlassdoor
           }
         }).then(function(response){
-
           console.log(response.data);
           $scope.reviews = response.data;
           // res.send(response.data);
@@ -1162,8 +1169,10 @@ angular.module('app.services', [])
 				data: {data: address}
 			})
 			.then(function(res) {
-				console.log('this is res form GoogleMapApi: ', res.data.results[0].geometry.location);
-				return res.data.results[0].geometry.location;
+				console.log('this is res form GoogleMapApi: ', res.data);
+				console.log('this is the state from GoogleMapApi: ', res.data.results[0].address_components[5])
+				return res.data;
+				//return res.data.results[0].geometry.location;
 			})
 			.catch(function(err) {
 				console.log(err)
