@@ -134,24 +134,20 @@ angular.
   component('emailToneWidget', {
     template:
     `
-    <md-card>
-
-      <md-card-header>
-        <md-card-header-text>
-          <md-input-container class="md-block">
-            <label>Email to Analyze</label>
-            <textarea ng-model="textToAnalyze" rows="10" md-select-on-focus></textarea>
-          </md-input-container>
-        </md-card-header-text>
-      </md-card-header>
+    <md-card class="tone-card-input">
+      <md-card-content>
+        <md-input-container class="md-block">
+          <label>Email to Analyze</label>
+          <textarea ng-model="textToAnalyze" rows="10" md-select-on-focus></textarea>
+        </md-input-container>
+      </md-card-content>
       <md-card-actions layout="row" layout-align="end center">
-        <md-button ng-click="analyzeText()">Analyze Tone</md-button>
+        <md-button class="nav-btn md-raised md-accent md-button md-ink-ripple" ng-click="analyzeText()">Analyze Tone</md-button>
       </md-card-actions>
     </md-card>
 
     <md-card ng-show="analyzed">
-      <md-card-header>
-        <md-card-header-text>
+      <md-card-content>
           <canvas id="emotionTone" class="chart-horizontal-bar"
             chart-data="[emotionToneData]" chart-labels="emotionToneLabels" >
           </canvas>
@@ -161,8 +157,8 @@ angular.
           <canvas id="socialTone" class="chart chart-radar"
             chart-data="[socialToneData]" chart-labels="socialToneLabels" >
           </canvas>
-        </md-card-header-text>
-      </md-card-header>
+
+      </md-card-content>
     </md-card>
     `,
     controller: function($scope, Tone) {
