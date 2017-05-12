@@ -58,9 +58,10 @@ module.exports = function(grunt) {
         'client/app/dashboard/*.js',
         'client/app/input/*.js',
         'client/app/landing/*.js',
-        'client/app/services/*.js'
+        'client/app/services/*.js',
+        'client/style.css'
       ],
-      tasks: ['concat'],
+      tasks: ['concat', 'cssmin'],
     },
   })
 

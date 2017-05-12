@@ -465,3 +465,19 @@ DASHBOARD
 .job-card contact-divider {
   padding-left: 0;
 }
+
+/*
+TONE
+*/
+
+.tone-card-input md-card-content {
+  padding-bottom: 0px;
+}
+
+.tone-card-input md-input-container {
+  margin-bottom: 0px;
+}
+
+.tone-card-input md-card-actions {
+  margin-top: 0px;
+}
