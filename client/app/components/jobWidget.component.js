@@ -55,11 +55,11 @@ angular.
             <p class="md-subhead"><strong>Description: </strong>{{$ctrl.data.description}}</p>
             <p class="md-subhead"><strong>Founded: </strong>{{$ctrl.data.founded}}</p>
             <p class="md-subhead"><strong># of Employees: </strong>{{$ctrl.data.approxEmployees}}</p>
-            <p class="md-subhead"><strong>Featured Review: </strong></p><br><a href='https://www.glassdoor.com/index.htm'>powered by <img src='https://www.glassdoor.com/static/img/api/glassdoor_logo_80.png' title='Job Search' /></a>
+            <p class="md-subhead"><strong>Featured Review: </strong>{{$scope.reviews}}</p><br><a href='https://www.glassdoor.com/index.htm'>powered by <img src='https://www.glassdoor.com/static/img/api/glassdoor_logo_80.png' title='Job Search' /></a>
             <md-button ng-click="$ctrl.queryGlassdoor()">Submit</md-button>
             <p class="md-subhead" ><strong>Address: </strong>{{$ctrl.data.address}}</p>
 
-            <p class="md-subhead" ng-init="$ctrl.googleMap($ctrl.data.address, $ctrl.data.officialName)" id="map" style="width: 800px; height: 600px"></p> 
+            <p class="md-subhead" ng-init="$ctrl.googleMap($ctrl.data.address, $ctrl.data.officialName)" id="map" style="width: 800px; height: 600px"></p>
 
             </md-content>
           </md-tab>
@@ -109,10 +109,6 @@ angular.
       let state;
 
       // favorite icon
-
-
-
-
 
       this.favorite = false;
 
@@ -195,6 +191,8 @@ angular.
       //                         'Error: The Geolocation service failed.' :
       //                         'Error: Your browser doesn\'t support geolocation.');
       // }
+
+      $scope.reviews;;
       this.queryGlassdoor = function(){
         $http({
           method: "POST",
@@ -203,9 +201,9 @@ angular.
             q : $scope.searchGlassdoor
           }
         }).then(function(response){
-          console.log(response.data);
-          $scope.reviews = response.data;
-          // res.send(response.data);
+          console.log("response From queryGlassdoor:" + response);
+        }).catch(function(err){
+          console.log(err);
         })
       };
 

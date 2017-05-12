@@ -448,7 +448,7 @@ app.use(bodyparser.urlencoded({extended:true}));
 		};
 		rp(options)
 		.then(function(response) {
-			console.log("This is response!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: ", response);
+			// console.log("This is response!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: ", response);
 			res.status(200).send(response);
 		})
 		.catch(function(err) {
@@ -564,7 +564,7 @@ app.use(bodyparser.urlencoded({extended:true}));
 		// console.log("I AM REQUEST INSIDE POST REQUEST TO SERVER" + JSON.stringify(req));
 		var options = {
 			method: 'GET',
-	  url: 'http://api.glassdoor.com/api/api.htm',
+	    url: 'http://api.glassdoor.com/api/api.htm',
 	  qs:
 	   { v: '1',
 	     format: 'json',
@@ -577,12 +577,13 @@ app.use(bodyparser.urlencoded({extended:true}));
 	     city: '\'new york\'' }
 		  };
 
+
 	request(options, function (error, response, body) {
 	  if (error) throw new Error(error);
 
 	  let parsedBody = JSON.parse(body);
-    console.log(parsedBody.response.employers);
-		res.send(parsedBody.response.employers);
+    console.log(parsedBody.response.employers[0].overallRating);
+		res.status(200).json(response);
 
 	});
 
