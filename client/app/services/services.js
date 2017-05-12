@@ -30,8 +30,10 @@ angular.module('app.services', [])
 				data: {data: address}
 			})
 			.then(function(res) {
-				console.log('this is res form GoogleMapApi: ', res.data.results[0].geometry.location);
-				return res.data.results[0].geometry.location;
+				console.log('this is res form GoogleMapApi: ', res.data);
+				console.log('this is the state from GoogleMapApi: ', res.data.results[0].address_components[5])
+				return res.data;
+				//return res.data.results[0].geometry.location;
 			})
 			.catch(function(err) {
 				console.log(err)
