@@ -301,7 +301,9 @@ angular.
             <md-button ng-click="$ctrl.queryGlassdoor()">Submit</md-button>
             <p class="md-subhead" ><strong>Address: </strong>{{$ctrl.data.address}}</p>
 
+
             <p class="md-subhead" ng-init="$ctrl.googleMap($ctrl.data.address, $ctrl.data.officialName)" id="map" style="width: 800px; height: 600px"></p>
+
 
             </md-content>
           </md-tab>
@@ -345,7 +347,9 @@ angular.
      data: '='
     },
 
+
     controller: function($window, $scope, $http, $route, $mdDialog, Jobs, GoogleMap) {
+
 
 
       let state;
@@ -396,23 +400,18 @@ angular.
       }
 
 
-
-
-      ////////////////////Google Map///////////////////////////////////////////
       this.googleMap = function(address, companyName) {
         GoogleMap.getLocationCode(address)
         .then(function(data){
-          console.log("Received geometry data from client server: ", data.results[0].geometry.location);
-          console.log("Received state name from client server: ", data.results[0].address_components[5].long_name);
-          state = data.results[0].address_components[5];
+          console.log(data);
           var mapProp = {
-          center:data.results[0].geometry.location,
+          center:data,
           zoom:12,
           mapTypeId:google.maps.MapTypeId.ROADMAP
           };
           var map=new google.maps.Map(document.getElementById("map"),mapProp);
           var marker=new google.maps.Marker({
-            position:data.results[0].geometry.location,
+            position:data,
             });
           marker.setMap(map);
           var infoWindow = new google.maps.InfoWindow({
@@ -425,7 +424,6 @@ angular.
           console.log(err);
         })
       }
-
 
       // function handleLocationError(browserHasGeolocation, infoWindow, pos) {
       //   infoWindow.setPosition(pos);
@@ -443,9 +441,9 @@ angular.
             q : $scope.searchGlassdoor
           }
         }).then(function(response){
+
           console.log("response From queryGlassdoor:" + response);
-        }).catch(function(err){
-          console.log(err);
+            $scope.reviews = response.data;
         })
       };
 
