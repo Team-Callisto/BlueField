@@ -432,6 +432,30 @@ app.use(bodyparser.urlencoded({extended:true}));
 		})
 	});
 
+	app.post('/api/companyMap', function(req, res) {
+
+		console.log('I get the address from client!!!', req.body.data);
+		let address = req.body.data;
+
+		let options = {
+			uri: "https://maps.googleapis.com/maps/api/geocode/json?",
+			qs: {
+				address: address
+			},
+			headers: {
+				key : config.apiKeys.googleMap
+			}
+		};
+		rp(options)
+		.then(function(response) {
+			console.log("This is response!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: ", response);
+			res.status(200).send(response);
+		})
+		.catch(function(err) {
+			res.status(400).send('Something\s wrong, please try again!')
+		})
+	});
+
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//                    Authentication
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -22,14 +22,16 @@ angular.module('app.services', [])
 })
 .factory('GoogleMap', function($http) {
 	return {
-		getInfo: function(companyUrl) {
+		getLocationCode: function(address) {
+			console.log('This is the address: ', address);
 			return $http({
-				method: 'GET',
-				url: '/api/companyMap?',
+				method: 'POST',
+				url: '/api/companyMap',
+				data: {data: address}
 			})
 			.then(function(res) {
-				console.log('this is res form GoogleMapApi: ', res.results.formatted_address);
-				return res.datares.results.formatted_address;
+				console.log('this is res form GoogleMapApi: ', res.data.results[0].geometry.location);
+				return res.data.results[0].geometry.location;
 			})
 			.catch(function(err) {
 				console.log(err)
