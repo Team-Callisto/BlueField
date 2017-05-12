@@ -298,8 +298,11 @@ angular.
             <p class="md-subhead"><strong>Founded: </strong>{{$ctrl.data.founded}}</p>
             <p class="md-subhead"><strong># of Employees: </strong>{{$ctrl.data.approxEmployees}}</p>
             <p class="md-subhead"><strong>Featured Review: </strong></p><br><a href='https://www.glassdoor.com/index.htm'>powered by <img src='https://www.glassdoor.com/static/img/api/glassdoor_logo_80.png' title='Job Search' /></a>
+            <md-button ng-click="$ctrl.queryGlassdoor()">Submit</md-button>
             <p class="md-subhead" ><strong>Address: </strong>{{$ctrl.data.address}}</p>
+
             <p class="md-subhead" ng-init="$ctrl.googleMap($ctrl.data.address, $ctrl.data.officialName)" id="map" style="width: 800px; height: 600px"></p> 
+
             </md-content>
           </md-tab>
 
@@ -341,10 +344,18 @@ angular.
     bindings: {
      data: '='
     },
-    controller: function($window, $scope, $route, $mdDialog, Jobs, GoogleMap) {
+
+    controller: function($window, $scope, $http, $route, $mdDialog, Jobs, GoogleMap) {
+
 
       let state;
+
       // favorite icon
+
+
+
+
+
       this.favorite = false;
 
       Jobs.get().then(function(data) {
@@ -407,11 +418,11 @@ angular.
             position:data.results[0].geometry.location,
             });
           marker.setMap(map);
-          var infoWindow = new google.maps.InfoWindow({ 
+          var infoWindow = new google.maps.InfoWindow({
             content: companyName
-            }); 
-          infoWindow.open(map, marker); 
-          
+            });
+          infoWindow.open(map, marker);
+
         })
         .catch(function(err) {
           console.log(err);
@@ -419,20 +430,25 @@ angular.
       }
 
 
-
-
-
-
-
-
-      //////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
+      // function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+      //   infoWindow.setPosition(pos);
+      //   infoWindow.setContent(browserHasGeolocation ?
+      //                         'Error: The Geolocation service failed.' :
+      //                         'Error: Your browser doesn\'t support geolocation.');
+      // }
+      this.queryGlassdoor = function(){
+        $http({
+          method: "POST",
+          url: "/api/glassdoor",
+          data : {
+            q : $scope.searchGlassdoor
+          }
+        }).then(function(response){
+          console.log(response.data);
+          $scope.reviews = response.data;
+          // res.send(response.data);
+        })
+      };
 
 
 
