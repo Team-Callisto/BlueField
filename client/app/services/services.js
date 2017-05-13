@@ -70,7 +70,8 @@ angular.module('app.services', [])
 				//console.log('this is res DIRECTIONDATA from GoogleMapApi: ', res.data.routes[0].legs[0]);
 				var directionDatas = {
 					distance: res.data.routes[0].legs[0].distance.text,
-					duration: res.data.routes[0].legs[0].duration.text
+					duration: res.data.routes[0].legs[0].duration.text,
+					mode: mode
 				}
 				return directionDatas;
 			})

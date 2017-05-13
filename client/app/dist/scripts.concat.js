@@ -296,11 +296,6 @@ angular.
             <p class="md-subhead"><strong>Featured Review: </strong></p><br><a href='https://www.glassdoor.com/index.htm'>powered by <img src='https://www.glassdoor.com/static/img/api/glassdoor_logo_80.png' title='Job Search' /></a>
             <md-button ng-click="$ctrl.queryGlassdoor()">Submit</md-button>
             <p class="md-subhead" ><strong>Address: </strong>{{$ctrl.data.address}}</p>
-
-
-            <p class="md-subhead" ng-init="$ctrl.googleMap($ctrl.data.address, $ctrl.data.officialName)" id="map" style="width: 800px; height: 600px"></p> 
-
-
             <md-button ng-click="$ctrl.googleMap($ctrl.data.address, $ctrl.data.officialName)">Show Map</md-button>
 
             </md-content>
@@ -408,40 +403,26 @@ angular.
         window.scrollTo(0,400);
         GoogleMap.getLocationCode(address)
         .then(function(data){
-          console.log("Received geometry data from client server: ", data.results[0].geometry.location);
-          console.log("Received state name from client server: ", data.results[0].address_components[5].long_name);
-          state = data.results[0].address_components[5];
-          //console.log(data);
-
           var mapProp = {
-          center:data.results[0].geometry.location,
+          center:data,
           zoom:12,
           mapTypeId:google.maps.MapTypeId.ROADMAP
           };
           var map=new google.maps.Map(document.getElementById("map"),mapProp);
           var marker=new google.maps.Marker({
-            position:data.results[0].geometry.location,
+            position:data,
             });
           marker.setMap(map);
-          var infoWindow = new google.maps.InfoWindow({
+          var infoWindow = new google.maps.InfoWindow({ 
             content: companyName
-            });
-          infoWindow.open(map, marker);
-
+            }); 
+          infoWindow.open(map, marker); 
+          
         })
         .catch(function(err) {
           console.log(err);
         })
       }
-
-
-
-      // function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-      //   infoWindow.setPosition(pos);
-      //   infoWindow.setContent(browserHasGeolocation ?
-      //                         'Error: The Geolocation service failed.' :
-      //                         'Error: Your browser doesn\'t support geolocation.');
-      // }
       this.queryGlassdoor = function(){
         $http({
           method: "POST",
@@ -455,10 +436,6 @@ angular.
           // res.send(response.data);
         })
       };
-
-
-
-
 
 
       this.editJob = function($event) {
@@ -624,33 +601,35 @@ angular.
 
       </md-card-content>
 
-      <md-card-content ng-show="displayDirection" layout="row" layout-align="center center">
+      <md-card-content ng-show="displayData" layout="row" layout-align="center center">
         <md-card-actions >
-          <md-button ng-click="displayFeature('TRANSIT')">Bus</md-button>
+          <md-button ng-click="displayFeature('TRANSIT')">TRANSIT</md-button>
         </md-card-actions>
 
         <md-card-actions >
-          <md-button ng-click="displayFeature('DRIVING')">Car</md-button>
+          <md-button ng-click="displayFeature('DRIVING')">DRIVING</md-button>
         </md-card-actions>
 
         <md-card-actions >
-          <md-button ng-click="displayFeature('BICYCLING')">Bicycle</md-button>
+          <md-button ng-click="displayFeature('BICYCLING')">BICYCLING</md-button>
         </md-card-actions>
 
         <md-card-actions >
-          <md-button ng-click="displayFeature('WALKING')">Walk</md-button>
+          <md-button ng-click="displayFeature('WALKING')">WALKING</md-button>
         </md-card-actions>
       </md-card-content>
 
-      <md-card-content ng-show="displayDirection">
-        <p stype="float:left" layout="column" layout-align="center none">Distance: {{dis}}</p>
-        <p stype="float:left" layout="column" layout-align="center none">Time: {{totleTime}}</p>
+      <md-card-content ng-show="displayData" style="display:flex; justify-content:space-around; align-items:flex-start">
+        <div><p>Transportation: {{trans}}</p></div>
+        <div><p>Distance: {{dis}}</p></div>
+        <div><p>Time: {{totleTime}}</p></div>
       </md-card-content>
 
       <md-card-actions ng-show="mapp" layout="column" layout-align=" stretch">
         <md-button ng-click="directionDisplay()">Direction</md-button>
+        <br>
       </md-card-actions>
-      <br>
+      
     </md-card>
     `,
     binding: {
@@ -674,6 +653,7 @@ angular.
 
       $rootScope.hideDisplayDirection = function() {
         $scope.displayDirection = false;
+        $scope.displayData = false;
       }
 
       $rootScope.hideDisplayMapp = function() {
@@ -720,7 +700,21 @@ angular.
               directionsDisplay.setDirections(response);
             }
           });
+          return end;
         })
+        .then(function(end) {
+            $scope.displayData = true;
+            return end;
+          })
+        .then(function(end) {
+          GoogleMap.getDirectionData(end, currentAddress, 'DRIVING')
+          .then(function(datas) {
+            $scope.trans = 'DRIVING';
+            $scope.totleTime = datas.duration;
+            $scope.dis = datas.distance;
+          })
+        })
+
           });
         }
       }
@@ -773,8 +767,10 @@ angular.
         .then(function(mode) {
           GoogleMap.getDirectionData(originAddress, currentAddress, mode)
           .then(function(datas) {
+            console.log("LASTONEEEEEEEEE!!!!!!", datas)
             $scope.totleTime = datas.duration;
             $scope.dis = datas.distance;
+            $scope.trans = mode;
           })
         })
 
@@ -1362,7 +1358,6 @@ angular.module('app.services', [])
 				data: {data: address}
 			})
 			.then(function(res) {
-
 				console.log('this is res CODE form GoogleMapApi: ', res.data.results[0].geometry.location);
 				return res.data.results[0].geometry.location;
 
@@ -1403,7 +1398,8 @@ angular.module('app.services', [])
 				//console.log('this is res DIRECTIONDATA from GoogleMapApi: ', res.data.routes[0].legs[0]);
 				var directionDatas = {
 					distance: res.data.routes[0].legs[0].distance.text,
-					duration: res.data.routes[0].legs[0].duration.text
+					duration: res.data.routes[0].legs[0].duration.text,
+					mode: mode
 				}
 				return directionDatas;
 			})

@@ -165,36 +165,26 @@ angular.
         window.scrollTo(0,400);
         GoogleMap.getLocationCode(address)
         .then(function(data){
-
           var mapProp = {
-          center:data.results[0].geometry.location,
+          center:data,
           zoom:12,
           mapTypeId:google.maps.MapTypeId.ROADMAP
           };
           var map=new google.maps.Map(document.getElementById("map"),mapProp);
           var marker=new google.maps.Marker({
-            position:data.results[0].geometry.location,
+            position:data,
             });
           marker.setMap(map);
-          var infoWindow = new google.maps.InfoWindow({
+          var infoWindow = new google.maps.InfoWindow({ 
             content: companyName
-            });
-          infoWindow.open(map, marker);
-
+            }); 
+          infoWindow.open(map, marker); 
+          
         })
         .catch(function(err) {
           console.log(err);
         })
       }
-
-
-
-      // function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-      //   infoWindow.setPosition(pos);
-      //   infoWindow.setContent(browserHasGeolocation ?
-      //                         'Error: The Geolocation service failed.' :
-      //                         'Error: Your browser doesn\'t support geolocation.');
-      // }
       this.queryGlassdoor = function(){
         $http({
           method: "POST",
