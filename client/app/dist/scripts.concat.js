@@ -296,11 +296,6 @@ angular.
             <p class="md-subhead"><strong>Featured Review: </strong></p><br><a href='https://www.glassdoor.com/index.htm'>powered by <img src='https://www.glassdoor.com/static/img/api/glassdoor_logo_80.png' title='Job Search' /></a>
             <md-button ng-click="$ctrl.queryGlassdoor()">Submit</md-button>
             <p class="md-subhead" ><strong>Address: </strong>{{$ctrl.data.address}}</p>
-
-
-            <p class="md-subhead" ng-init="$ctrl.googleMap($ctrl.data.address, $ctrl.data.officialName)" id="map" style="width: 800px; height: 600px"></p> 
-
-
             <md-button ng-click="$ctrl.googleMap($ctrl.data.address, $ctrl.data.officialName)">Show Map</md-button>
 
             </md-content>
@@ -408,40 +403,26 @@ angular.
         window.scrollTo(0,400);
         GoogleMap.getLocationCode(address)
         .then(function(data){
-          console.log("Received geometry data from client server: ", data.results[0].geometry.location);
-          console.log("Received state name from client server: ", data.results[0].address_components[5].long_name);
-          state = data.results[0].address_components[5];
-          //console.log(data);
-
           var mapProp = {
-          center:data.results[0].geometry.location,
+          center:data,
           zoom:12,
           mapTypeId:google.maps.MapTypeId.ROADMAP
           };
           var map=new google.maps.Map(document.getElementById("map"),mapProp);
           var marker=new google.maps.Marker({
-            position:data.results[0].geometry.location,
+            position:data,
             });
           marker.setMap(map);
-          var infoWindow = new google.maps.InfoWindow({
+          var infoWindow = new google.maps.InfoWindow({ 
             content: companyName
-            });
-          infoWindow.open(map, marker);
-
+            }); 
+          infoWindow.open(map, marker); 
+          
         })
         .catch(function(err) {
           console.log(err);
         })
       }
-
-
-
-      // function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-      //   infoWindow.setPosition(pos);
-      //   infoWindow.setContent(browserHasGeolocation ?
-      //                         'Error: The Geolocation service failed.' :
-      //                         'Error: Your browser doesn\'t support geolocation.');
-      // }
       this.queryGlassdoor = function(){
         $http({
           method: "POST",
@@ -455,10 +436,6 @@ angular.
           // res.send(response.data);
         })
       };
-
-
-
-
 
 
       this.editJob = function($event) {
@@ -1362,7 +1339,6 @@ angular.module('app.services', [])
 				data: {data: address}
 			})
 			.then(function(res) {
-
 				console.log('this is res CODE form GoogleMapApi: ', res.data.results[0].geometry.location);
 				return res.data.results[0].geometry.location;
 

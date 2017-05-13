@@ -199,23 +199,13 @@ angular.module('glassDoorWidget')
 angular.module('jobWidget', []);
 
 angular.module('jobWidget').component('jobWidget', {
-<<<<<<< HEAD
-  template: '\n    <md-card class="job-card">\n      <md-card-header style="display:flex; align-items:center">\n        <md-card-avatar class="job-widget-image" style="{{$ctrl.imageStyle($ctrl.data.imageUrl)}}"></md-card-avatar>\n\n        <md-card-header-text>\n          <span class="md-headline">{{$ctrl.data.company}}</span>\n          <span class="md-subhead">{{$ctrl.data.position}}</span>\n        </md-card-header-text>\n\n        <!--<md-button class="md-fab md-mini" ng-click="$ctrl.toggleFavorite()">\n            <md-tooltip md-direction="top">Set as Favorite</md-tooltip>\n            <md-icon>{{$ctrl.renderFavoriteIcon()}}</md-icon>\n        </md-button>-->\n\n        <md-button class="md-fab md-mini" ng-click="$ctrl.editJob()">\n            <md-tooltip md-direction="top">Edit Job</md-tooltip>\n            <md-icon>edit</md-icon>\n        </md-button>\n\n        <md-button class="md-fab md-mini" ng-click="$ctrl.deleteJob($ctrl.data)">\n            <md-tooltip md-direction="top">Delete Job</md-tooltip>\n            <md-icon>delete</md-icon>\n        </md-button>\n      </md-card-header>\n\n      <md-divider></md-divider>\n      <md-tabs md-dynamic-height="" md-border-bottom="" md-center-tabs="true" md-stretch-tabs="always">\n\n         <!--<md-tab>\n            <md-tab-label><md-icon>expand_less</md-icon></md-tab-label>\n          </md-tab>-->\n\n          <md-tab label="JOB INFO">\n          <md-content>\n              <p class="md-subhead"><strong>Date Applied: </strong>{{$ctrl.parseDate($ctrl.data.dateCreated)}}</p>\n              <p class="md-subhead"><strong>Application Link: </strong>{{$ctrl.data.link}}</p>\n              <p class="md-subhead"><strong>Current Step: </strong>{{$ctrl.data.currentStep.name}}</p>\n              <p class="md-subhead"><strong>Next Step: </strong>{{$ctrl.data.nextStep.name}}</p>\n              <p class="md-subhead"><strong>Salary: </strong>${{$ctrl.data.salary}}</p>\n              <p id="map_canvas" style="float:left;width:70%; height:100%"></p>\n          </md-content>\n          </md-tab>\n\n          <md-tab label="COMPANY">\n          <md-content>\n            <p class="md-subhead"><strong>Company: </strong>{{$ctrl.data.officialName}}</p>\n            <p class="md-subhead"><strong>Website: </strong><a href=\'http://{{$ctrl.data.website}}\'/>{{$ctrl.data.website}}</a></p>\n            <p class="md-subhead"><strong>Description: </strong>{{$ctrl.data.description}}</p>\n            <p class="md-subhead"><strong>Founded: </strong>{{$ctrl.data.founded}}</p>\n            <p class="md-subhead"><strong># of Employees: </strong>{{$ctrl.data.approxEmployees}}</p>\n            <p class="md-subhead"><strong>Featured Review: </strong></p><br><a href=\'https://www.glassdoor.com/index.htm\'>powered by <img src=\'https://www.glassdoor.com/static/img/api/glassdoor_logo_80.png\' title=\'Job Search\' /></a>\n            <md-button ng-click="$ctrl.queryGlassdoor()">Submit</md-button>\n            <p class="md-subhead" ><strong>Address: </strong>{{$ctrl.data.address}}</p>\n\n            <p class="md-subhead" ng-init="$ctrl.googleMap($ctrl.data.address, $ctrl.data.officialName)" id="map" style="width: 800px; height: 600px"></p> \n\n            </md-content>\n          </md-tab>\n\n          <md-tab label="CONTACT">\n          <md-content ng-repeat=\'contact in $ctrl.data.contacts\'>\n            <div layout="column" class="contact-divider" style="padding-left: 0">\n              <p class="md-subhead contact-info"><md-icon>person</md-icon>{{contact.name}}</p>\n              <p class="md-subhead contact-info"><md-icon>phone</md-icon>{{contact.phoneNumber}}</p>\n              <p class="md-subhead contact-info"><md-icon>email</md-icon>{{contact.email}}</p>\n            </div>\n          </md-content>\n          </md-tab>\n\n          <md-tab label="STATUS">\n          <md-content>\n            <div layout="column" class="contact-divider" style="padding-left: 0">\n              <p class="md-subhead" style="margin-top: 0"> <strong>Current Step: </strong> {{$ctrl.data.currentStep.name}}</p>\n              <p class="md-subhead" style="margin-top: 0"> <strong>Due: </strong> {{$ctrl.parseDate($ctrl.data.currentStep.dueDate)}}</p>\n              <p class="md-subhead" style="margin-top: 0; margin-bottom: 0;" ng-if="$ctrl.data.currentStep.comments.length > 0"> <strong>Comments: </strong>\n                <md-content layout-margin ng-repeat=\'comment in $ctrl.data.currentStep.comments\'> {{comment}} </md-content>\n              </p>\n\n              <md-divider style="margin-top: 16px; margin-bottom: 16px;"></md-divider>\n\n              <p class="md-subhead"> <strong>Next Step: </strong> {{$ctrl.data.nextStep.name}}</p>\n              <p class="md-subhead" style="margin-top: 0"> <strong>Due: </strong> {{$ctrl.parseDate($ctrl.data.nextStep.dueDate)}}</p>\n              <p class="md-subhead" style="margin-top: 0; margin-bottom: 0;" ng-if="$ctrl.data.currentStep.comments.length > 0"> <strong>Comments: </strong>\n                <md-content layout-margin ng-repeat=\'comment in $ctrl.data.nextStep.comments\'> {{comment}} </md-content>\n              </p>\n            </div>\n\n          </md-content>\n        </md-tab>\n\n        </md-tabs>\n\n    </md-card>\n    ',
+  template: '\n    <md-card class="job-card">\n      <md-card-header style="display:flex; align-items:center">\n        <md-card-avatar class="job-widget-image" style="{{$ctrl.imageStyle($ctrl.data.imageUrl)}}"></md-card-avatar>\n\n        <md-card-header-text>\n          <span class="md-headline">{{$ctrl.data.company}}</span>\n          <span class="md-subhead">{{$ctrl.data.position}}</span>\n        </md-card-header-text>\n\n        <!--<md-button class="md-fab md-mini" ng-click="$ctrl.toggleFavorite()">\n            <md-tooltip md-direction="top">Set as Favorite</md-tooltip>\n            <md-icon>{{$ctrl.renderFavoriteIcon()}}</md-icon>\n        </md-button>-->\n\n        <md-button class="md-fab md-mini" ng-click="$ctrl.editJob()">\n            <md-tooltip md-direction="top">Edit Job</md-tooltip>\n            <md-icon>edit</md-icon>\n        </md-button>\n\n        <md-button class="md-fab md-mini" ng-click="$ctrl.deleteJob($ctrl.data)">\n            <md-tooltip md-direction="top">Delete Job</md-tooltip>\n            <md-icon>delete</md-icon>\n        </md-button>\n      </md-card-header>\n\n      <md-divider></md-divider>\n      <md-tabs md-dynamic-height="" md-border-bottom="" md-center-tabs="true" md-stretch-tabs="always">\n\n         <!--<md-tab>\n            <md-tab-label><md-icon>expand_less</md-icon></md-tab-label>\n          </md-tab>-->\n\n          <md-tab label="JOB INFO">\n          <md-content>\n              <p class="md-subhead"><strong>Date Applied: </strong>{{$ctrl.parseDate($ctrl.data.dateCreated)}}</p>\n              <p class="md-subhead"><strong>Application Link: </strong>{{$ctrl.data.link}}</p>\n              <p class="md-subhead"><strong>Current Step: </strong>{{$ctrl.data.currentStep.name}}</p>\n              <p class="md-subhead"><strong>Next Step: </strong>{{$ctrl.data.nextStep.name}}</p>\n              <p class="md-subhead"><strong>Salary: </strong>${{$ctrl.data.salary}}</p>\n              <p id="map_canvas" style="float:left;width:70%; height:100%"></p>\n          </md-content>\n          </md-tab>\n\n          <md-tab label="COMPANY">\n          <md-content>\n            <p class="md-subhead"><strong>Company: </strong>{{$ctrl.data.officialName}}</p>\n            <p class="md-subhead"><strong>Website: </strong><a href=\'http://{{$ctrl.data.website}}\'/>{{$ctrl.data.website}}</a></p>\n            <p class="md-subhead"><strong>Description: </strong>{{$ctrl.data.description}}</p>\n            <p class="md-subhead"><strong>Founded: </strong>{{$ctrl.data.founded}}</p>\n            <p class="md-subhead"><strong># of Employees: </strong>{{$ctrl.data.approxEmployees}}</p>\n            <p class="md-subhead"><strong>Featured Review: </strong></p><br><a href=\'https://www.glassdoor.com/index.htm\'>powered by <img src=\'https://www.glassdoor.com/static/img/api/glassdoor_logo_80.png\' title=\'Job Search\' /></a>\n            <md-button ng-click="$ctrl.queryGlassdoor()">Submit</md-button>\n            <p class="md-subhead" ><strong>Address: </strong>{{$ctrl.data.address}}</p>\n            <md-button ng-click="$ctrl.googleMap($ctrl.data.address, $ctrl.data.officialName)">Show Map</md-button>\n\n            </md-content>\n          </md-tab>\n\n          <md-tab label="CONTACT">\n          <md-content ng-repeat=\'contact in $ctrl.data.contacts\'>\n            <div layout="column" class="contact-divider" style="padding-left: 0">\n              <p class="md-subhead contact-info"><md-icon>person</md-icon>{{contact.name}}</p>\n              <p class="md-subhead contact-info"><md-icon>phone</md-icon>{{contact.phoneNumber}}</p>\n              <p class="md-subhead contact-info"><md-icon>email</md-icon>{{contact.email}}</p>\n            </div>\n          </md-content>\n          </md-tab>\n\n          <md-tab label="STATUS">\n          <md-content>\n            <div layout="column" class="contact-divider" style="padding-left: 0">\n              <p class="md-subhead" style="margin-top: 0"> <strong>Current Step: </strong> {{$ctrl.data.currentStep.name}}</p>\n              <p class="md-subhead" style="margin-top: 0"> <strong>Due: </strong> {{$ctrl.parseDate($ctrl.data.currentStep.dueDate)}}</p>\n              <p class="md-subhead" style="margin-top: 0; margin-bottom: 0;" ng-if="$ctrl.data.currentStep.comments.length > 0"> <strong>Comments: </strong>\n                <md-content layout-margin ng-repeat=\'comment in $ctrl.data.currentStep.comments\'> {{comment}} </md-content>\n              </p>\n\n              <md-divider style="margin-top: 16px; margin-bottom: 16px;"></md-divider>\n\n              <p class="md-subhead"> <strong>Next Step: </strong> {{$ctrl.data.nextStep.name}}</p>\n              <p class="md-subhead" style="margin-top: 0"> <strong>Due: </strong> {{$ctrl.parseDate($ctrl.data.nextStep.dueDate)}}</p>\n              <p class="md-subhead" style="margin-top: 0; margin-bottom: 0;" ng-if="$ctrl.data.currentStep.comments.length > 0"> <strong>Comments: </strong>\n                <md-content layout-margin ng-repeat=\'comment in $ctrl.data.nextStep.comments\'> {{comment}} </md-content>\n              </p>\n            </div>\n\n          </md-content>\n        </md-tab>\n\n        </md-tabs>\n\n    </md-card>\n    ',
   bindings: {
     data: '='
   },
 
-  controller: function controller($window, $scope, $http, $route, $mdDialog, Jobs, GoogleMap) {
-
-    var state = void 0;
-
-=======
-  template: '\n    <md-card class="job-card">\n      <md-card-header style="display:flex; align-items:center">\n        <md-card-avatar class="job-widget-image" style="{{$ctrl.imageStyle($ctrl.data.imageUrl)}}"></md-card-avatar>\n\n        <md-card-header-text>\n          <span class="md-headline">{{$ctrl.data.company}}</span>\n          <span class="md-subhead">{{$ctrl.data.position}}</span>\n        </md-card-header-text>\n\n        <!--<md-button class="md-fab md-mini" ng-click="$ctrl.toggleFavorite()">\n            <md-tooltip md-direction="top">Set as Favorite</md-tooltip>\n            <md-icon>{{$ctrl.renderFavoriteIcon()}}</md-icon>\n        </md-button>-->\n\n        <md-button class="md-fab md-mini" ng-click="$ctrl.editJob()">\n            <md-tooltip md-direction="top">Edit Job</md-tooltip>\n            <md-icon>edit</md-icon>\n        </md-button>\n\n        <md-button class="md-fab md-mini" ng-click="$ctrl.deleteJob($ctrl.data)">\n            <md-tooltip md-direction="top">Delete Job</md-tooltip>\n            <md-icon>delete</md-icon>\n        </md-button>\n      </md-card-header>\n\n      <md-divider></md-divider>\n      <md-tabs md-dynamic-height="" md-border-bottom="" md-center-tabs="true" md-stretch-tabs="always">\n\n         <!--<md-tab>\n            <md-tab-label><md-icon>expand_less</md-icon></md-tab-label>\n          </md-tab>-->\n\n          <md-tab label="JOB INFO">\n          <md-content>\n              <p class="md-subhead"><strong>Date Applied: </strong>{{$ctrl.parseDate($ctrl.data.dateCreated)}}</p>\n              <p class="md-subhead"><strong>Application Link: </strong>{{$ctrl.data.link}}</p>\n              <p class="md-subhead"><strong>Current Step: </strong>{{$ctrl.data.currentStep.name}}</p>\n              <p class="md-subhead"><strong>Next Step: </strong>{{$ctrl.data.nextStep.name}}</p>\n              <p class="md-subhead"><strong>Salary: </strong>${{$ctrl.data.salary}}</p>\n              <p id="map_canvas" style="float:left;width:70%; height:100%"></p>\n          </md-content>\n          </md-tab>\n\n          <md-tab label="COMPANY">\n          <md-content>\n            <p class="md-subhead"><strong>Company: </strong>{{$ctrl.data.officialName}}</p>\n            <p class="md-subhead"><strong>Website: </strong><a href=\'http://{{$ctrl.data.website}}\'/>{{$ctrl.data.website}}</a></p>\n            <p class="md-subhead"><strong>Description: </strong>{{$ctrl.data.description}}</p>\n            <p class="md-subhead"><strong>Founded: </strong>{{$ctrl.data.founded}}</p>\n            <p class="md-subhead"><strong># of Employees: </strong>{{$ctrl.data.approxEmployees}}</p>\n            <p class="md-subhead"><strong>Featured Review: </strong></p><br><a href=\'https://www.glassdoor.com/index.htm\'>powered by <img src=\'https://www.glassdoor.com/static/img/api/glassdoor_logo_80.png\' title=\'Job Search\' /></a>\n            <p class="md-subhead" ><strong>Address: </strong>{{$ctrl.data.address}}</p>\n            <md-button ng-click="$ctrl.googleMap($ctrl.data.address, $ctrl.data.officialName)">Show Map</md-button>\n            </md-content>\n          </md-tab>\n\n          <md-tab label="CONTACT">\n          <md-content ng-repeat=\'contact in $ctrl.data.contacts\'>\n            <div layout="column" class="contact-divider" style="padding-left: 0">\n              <p class="md-subhead contact-info"><md-icon>person</md-icon>{{contact.name}}</p>\n              <p class="md-subhead contact-info"><md-icon>phone</md-icon>{{contact.phoneNumber}}</p>\n              <p class="md-subhead contact-info"><md-icon>email</md-icon>{{contact.email}}</p>\n            </div>\n          </md-content>\n          </md-tab>\n\n          <md-tab label="STATUS">\n          <md-content>\n            <div layout="column" class="contact-divider" style="padding-left: 0">\n              <p class="md-subhead" style="margin-top: 0"> <strong>Current Step: </strong> {{$ctrl.data.currentStep.name}}</p>\n              <p class="md-subhead" style="margin-top: 0"> <strong>Due: </strong> {{$ctrl.parseDate($ctrl.data.currentStep.dueDate)}}</p>\n              <p class="md-subhead" style="margin-top: 0; margin-bottom: 0;" ng-if="$ctrl.data.currentStep.comments.length > 0"> <strong>Comments: </strong>\n                <md-content layout-margin ng-repeat=\'comment in $ctrl.data.currentStep.comments\'> {{comment}} </md-content>\n              </p>\n\n              <md-divider style="margin-top: 16px; margin-bottom: 16px;"></md-divider>\n\n              <p class="md-subhead"> <strong>Next Step: </strong> {{$ctrl.data.nextStep.name}}</p>\n              <p class="md-subhead" style="margin-top: 0"> <strong>Due: </strong> {{$ctrl.parseDate($ctrl.data.nextStep.dueDate)}}</p>\n              <p class="md-subhead" style="margin-top: 0; margin-bottom: 0;" ng-if="$ctrl.data.currentStep.comments.length > 0"> <strong>Comments: </strong>\n                <md-content layout-margin ng-repeat=\'comment in $ctrl.data.nextStep.comments\'> {{comment}} </md-content>\n              </p>\n            </div>\n\n          </md-content>\n        </md-tab>\n\n        </md-tabs>\n\n    </md-card>\n    ',
-  bindings: {
-    data: '='
-  },
   controller: function controller($window, $scope, $route, $mdDialog, Jobs, GoogleMap, $rootScope) {
->>>>>>> googlemap02
+
     // favorite icon
 
 
@@ -268,21 +258,14 @@ angular.module('jobWidget').component('jobWidget', {
       $rootScope.hideDisplayMapp();
       window.scrollTo(0, 400);
       GoogleMap.getLocationCode(address).then(function (data) {
-<<<<<<< HEAD
-        console.log("Received geometry data from client server: ", data.results[0].geometry.location);
-        console.log("Received state name from client server: ", data.results[0].address_components[5].long_name);
-        state = data.results[0].address_components[5];
-=======
-        //console.log(data);
->>>>>>> googlemap02
         var mapProp = {
-          center: data.results[0].geometry.location,
+          center: data,
           zoom: 12,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         var map = new google.maps.Map(document.getElementById("map"), mapProp);
         var marker = new google.maps.Marker({
-          position: data.results[0].geometry.location
+          position: data
         });
         marker.setMap(map);
         var infoWindow = new google.maps.InfoWindow({
@@ -293,14 +276,6 @@ angular.module('jobWidget').component('jobWidget', {
         console.log(err);
       });
     };
-
-<<<<<<< HEAD
-    // function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-    //   infoWindow.setPosition(pos);
-    //   infoWindow.setContent(browserHasGeolocation ?
-    //                         'Error: The Geolocation service failed.' :
-    //                         'Error: Your browser doesn\'t support geolocation.');
-    // }
     this.queryGlassdoor = function () {
       $http({
         method: "POST",
@@ -315,8 +290,6 @@ angular.module('jobWidget').component('jobWidget', {
       });
     };
 
-=======
->>>>>>> googlemap02
     this.editJob = function ($event) {
       var parentEl = angular.element(document.body);
       $mdDialog.show({
@@ -366,7 +339,7 @@ angular.module('mapWidget').component('mapWidget', {
 
     var currentAddress = void 0;
     var directionsService = void 0;
-    var directionDisplay = void 0;
+    var directionsDisplay = void 0;
     var originAddress = void 0;
 
     $rootScope.displayMapFunc = function () {
@@ -825,15 +798,8 @@ angular.module('app.services', []).factory('Companies', function ($http) {
         url: '/api/companyMap',
         data: { data: address }
       }).then(function (res) {
-<<<<<<< HEAD
-        console.log('this is res form GoogleMapApi: ', res.data);
-        console.log('this is the state from GoogleMapApi: ', res.data.results[0].address_components[5]);
-        return res.data;
-        //return res.data.results[0].geometry.location;
-=======
         console.log('this is res CODE form GoogleMapApi: ', res.data.results[0].geometry.location);
         return res.data.results[0].geometry.location;
->>>>>>> googlemap02
       }).catch(function (err) {
         console.log(err);
       });
