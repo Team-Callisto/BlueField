@@ -109,15 +109,7 @@ angular.
      data: '='
     },
 
-
-  
-
-      // favorite icon
-
-
-
-
-    controller: function($window, $scope, $http, $route, $mdDialog, Jobs, GoogleMap) {
+    controller: function($window, $scope, $rootScope, $http, $route, $mdDialog, Jobs, GoogleMap) {
 
       this.favorite = false;
 
@@ -168,7 +160,7 @@ angular.
         $rootScope.getAddressData(address);
         $rootScope.hideDisplayDirection();
         $rootScope.hideDisplayMapp();
-        window.scrollTo(0,400);
+        window.scrollTo(0,200);
         GoogleMap.getLocationCode(address)
         .then(function(data){
 
@@ -182,11 +174,11 @@ angular.
             position:data,
             });
           marker.setMap(map);
-          var infoWindow = new google.maps.InfoWindow({ 
+          var infoWindow = new google.maps.InfoWindow({
             content: companyName
-            }); 
-          infoWindow.open(map, marker); 
-          
+            });
+          infoWindow.open(map, marker);
+
         })
         .catch(function(err) {
           console.log(err);
