@@ -18,7 +18,7 @@ angular.
 
       </md-card-content>
 
-      <md-card-content ng-show="displayDirection" layout="row" layout-align="center center">
+      <md-card-content ng-show="displayData" layout="row" layout-align="center center">
         <md-card-actions >
           <md-button ng-click="displayFeature('TRANSIT')">Bus</md-button>
         </md-card-actions>
@@ -36,7 +36,7 @@ angular.
         </md-card-actions>
       </md-card-content>
 
-      <md-card-content ng-show="displayDirection">
+      <md-card-content ng-show="displayData">
         <p stype="float:left" layout="column" layout-align="center none">Distance: {{dis}}</p>
         <p stype="float:left" layout="column" layout-align="center none">Time: {{totleTime}}</p>
       </md-card-content>
@@ -68,6 +68,7 @@ angular.
 
       $rootScope.hideDisplayDirection = function() {
         $scope.displayDirection = false;
+        $scope.displayData = false;
       }
 
       $rootScope.hideDisplayMapp = function() {
@@ -114,7 +115,20 @@ angular.
               directionsDisplay.setDirections(response);
             }
           });
+          return end;
         })
+        .then(function(end) {
+            $scope.displayData = true;
+            return end;
+          })
+        .then(function(end) {
+          GoogleMap.getDirectionData(end, currentAddress, 'DRIVING')
+          .then(function(datas) {
+            $scope.totleTime = datas.duration;
+            $scope.dis = datas.distance;
+          })
+        })
+
           });
         }
       }
