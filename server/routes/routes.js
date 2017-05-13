@@ -408,7 +408,9 @@ app.use(bodyparser.urlencoded({extended:true}));
 	});
 
 
-	//Google Map
+	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//                   Google Map Api
+	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	app.post('/api/addressMap', function(req, res) {
 		console.log('I get the addressCODE from client!!!', req.body.data);
 		console.log('Sepreate code 01: ', req.body.data.lat);
@@ -465,7 +467,7 @@ app.use(bodyparser.urlencoded({extended:true}));
 		
 		let origin = req.body.origin;
 		let destination = req.body.destination;
-		let mode = req.body.mode;
+		let mode = req.body.mode.toLowerCase();
 
 		let options = {
 			uri: "https://maps.googleapis.com/maps/api/directions/json?",

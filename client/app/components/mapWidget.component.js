@@ -18,32 +18,33 @@ angular.
 
       </md-card-content>
 
-      <md-card-content layout="row" layout-align="center center">
-        <md-card-actions ng-show="displayDirection" >
+      <md-card-content ng-show="displayDirection" layout="row" layout-align="center center">
+        <md-card-actions >
           <md-button ng-click="displayFeature('TRANSIT')">Bus</md-button>
         </md-card-actions>
 
-        <md-card-actions ng-show="displayDirection" >
+        <md-card-actions >
           <md-button ng-click="displayFeature('DRIVING')">Car</md-button>
         </md-card-actions>
 
-        <md-card-actions ng-show="displayDirection" >
+        <md-card-actions >
           <md-button ng-click="displayFeature('BICYCLING')">Bicycle</md-button>
         </md-card-actions>
 
-        <md-card-actions ng-show="displayDirection" >
+        <md-card-actions >
           <md-button ng-click="displayFeature('WALKING')">Walk</md-button>
         </md-card-actions>
       </md-card-content>
 
-      <md-card-content>
-        <p ng-show="displayDirection" stype="float:left" layout="column" layout-align="center none">Distance: </p>
-        <p ng-show="displayDirection" stype="float:left" layout="column" layout-align="center none">Time: </p>
+      <md-card-content ng-show="displayDirection">
+        <p stype="float:left" layout="column" layout-align="center none">Distance: {{dis}}</p>
+        <p stype="float:left" layout="column" layout-align="center none">Time: {{totleTime}}</p>
       </md-card-content>
 
-      <md-card-actions ng-show="mapp" layout="row" layout-align="center start">
+      <md-card-actions ng-show="mapp" layout="column" layout-align=" stretch">
         <md-button ng-click="directionDisplay()">Direction</md-button>
       </md-card-actions>
+      <br>
     </md-card>
     `,
     binding: {
@@ -54,6 +55,7 @@ angular.
       let currentAddress;
       let directionsService;
       let directionDisplay;
+      let originAddress;
 
 
       $rootScope.displayMapFunc = function() {
@@ -148,6 +150,7 @@ angular.
         .then(function(end) {
           console.log("transportation Gos here", transportation)
           var way = google.maps.TravelMode[transportation];
+          originAddress = end
           var request = {
             origin: end,
             destination: currentAddress,
@@ -159,11 +162,22 @@ angular.
               directionsDisplay.setDirections(response);
             }
           });
+          return transportation;
         })
+        .then(function(mode) {
+          GoogleMap.getDirectionData(originAddress, currentAddress, mode)
+          .then(function(datas) {
+            $scope.totleTime = datas.duration;
+            $scope.dis = datas.distance;
+          })
+        })
+
+
+
+
           });
         }
       }
-
 
 
     }

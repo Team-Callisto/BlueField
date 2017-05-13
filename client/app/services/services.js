@@ -52,6 +52,30 @@ angular.module('app.services', [])
 			.catch(function(err) {
 				console.log(err);
 			})
+		},
+
+		getDirectionData: function(origin, destination, mode ) {
+			console.log('WWWWWWWWWWWWWWWWWWWWWW', origin, destination, mode);
+			return $http({
+				method: 'POST',
+				url: '/api/directionData',
+				data: {
+					origin: origin,
+					destination: destination,
+					mode: mode
+				}
+			})
+			.then(function(res) {
+				//console.log('this is res DIRECTIONDATA from GoogleMapApi: ', res.data.routes[0].legs[0]);
+				var directionDatas = {
+					distance: res.data.routes[0].legs[0].distance.text,
+					duration: res.data.routes[0].legs[0].duration.text
+				}
+				return directionDatas;
+			})
+			.catch(function(err) {
+				console.log(err);
+			})
 		}
 
   }

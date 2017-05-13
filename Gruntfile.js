@@ -62,6 +62,6 @@ module.exports = function(grunt) {
     'concat',
     'babel',
     // 'uglify',
-    // 'cssmin'
+    'cssmin'
   ])
 };
