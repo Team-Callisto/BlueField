@@ -54,7 +54,7 @@ angular.
 
       let currentAddress;
       let directionsService;
-      let directionDisplay;
+      let directionsDisplay;
       let originAddress;
 
 
