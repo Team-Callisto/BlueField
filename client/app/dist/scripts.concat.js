@@ -391,7 +391,13 @@ angular.
 
 
 
-    controller: function($window, $scope, $http, $route, $mdDialog, Jobs, GoogleMap, $rootScope) {
+
+      // favorite icon
+
+
+
+
+    controller: function($window, $scope, $rootScope, $http, $route, $mdDialog, Jobs, GoogleMap) {
 
       this.favorite = false;
 
@@ -437,16 +443,12 @@ angular.
       }
 
 
-
-
-      ////////////////////Google Map///////////////////////////////////////////
-
       this.googleMap = function(address, companyName) {
         $rootScope.displayMapFunc();
         $rootScope.getAddressData(address);
         $rootScope.hideDisplayDirection();
         $rootScope.hideDisplayMapp();
-        window.scrollTo(0,400);
+        window.scrollTo(0,200);
         GoogleMap.getLocationCode(address)
         .then(function(data){
 
@@ -460,16 +462,24 @@ angular.
             position:data,
             });
           marker.setMap(map);
-          var infoWindow = new google.maps.InfoWindow({ 
+          var infoWindow = new google.maps.InfoWindow({
             content: companyName
-            }); 
-          infoWindow.open(map, marker); 
-          
+            });
+          infoWindow.open(map, marker);
+
         })
         .catch(function(err) {
           console.log(err);
         })
       }
+
+
+      // function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+      //   infoWindow.setPosition(pos);
+      //   infoWindow.setContent(browserHasGeolocation ?
+      //                         'Error: The Geolocation service failed.' :
+      //                         'Error: Your browser doesn\'t support geolocation.');
+      // }
 
       this.queryGlassdoor = function(){
 
@@ -492,7 +502,6 @@ angular.
 
         })
       };
-
       this.editJob = function($event) {
         var parentEl = angular.element(document.body)
         $mdDialog.show({
