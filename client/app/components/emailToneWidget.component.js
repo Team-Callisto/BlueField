@@ -19,21 +19,63 @@ angular.
 
     <md-card ng-show="analyzed">
       <md-card-content>
-          <canvas id="emotionTone" class="chart-horizontal-bar"
-            chart-data="[emotionToneData]" chart-labels="emotionToneLabels" >
-          </canvas>
-          <canvas id="languageTone" class="chart-horizontal-bar"
-            chart-data="[languageToneData]" chart-labels="languageToneLabels" >
-          </canvas>
-          <canvas id="socialTone" class="chart chart-radar"
-            chart-data="[socialToneData]" chart-labels="socialToneLabels" >
-          </canvas>
-
+        <div class="graphs">
+          <div class="graph">
+            <h4>Emotion</h4>
+            <canvas id="emotionTone" class="chart-horizontal-bar" chart-colors="graphColors.emotionTone"
+              chart-data="[emotionToneData]" chart-labels="emotionToneLabels"
+              chart-options="options">
+            </canvas>
+          </div>
+          <div class="graph">
+            <h4>Language Style</h4>
+            <canvas id="languageTone" class="chart-horizontal-bar" chart-colors="graphColors.languageTone"
+              chart-data="[languageToneData]" chart-labels="languageToneLabels"
+              chart-options="options" chart-colors="colors">
+            </canvas>
+          </div>
+          <div class="graph">
+            <h4>Social Tendencies</h4>
+            <canvas id="socialTone" class="chart-horizontal-bar" chart-colors="graphColors.socialTone"
+              chart-data="[socialToneData]" chart-labels="socialToneLabels"
+              chart-options="options">
+            </canvas>
+          </div>
+        </div>
       </md-card-content>
     </md-card>
     `,
     controller: function($scope, Tone) {
       console.log('hello tone widge');
+
+      $scope.graphColors = {
+        emotionTone: [{
+          backgroundColor: '#086DB2',
+          borderWidth: 0
+        }],
+        languageTone: [{
+          backgroundColor: '#274b5f',
+          borderWidth: 0
+        }],
+        socialTone: [{
+          backgroundColor: '#1cb4a0',
+          borderWidth: 0
+        }]
+      }
+
+      $scope.options = {
+        responsive: true,
+        maintainAspectRatio: true,
+        scales: {
+            xAxes: [{
+                ticks: {
+                    max: 1,
+                    min: 0,
+                    stepSize: 0.25
+                }
+            }]
+        }
+      }
 
       $scope.analyzeText = function() {
         console.log('inside dcontroller')
