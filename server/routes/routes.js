@@ -408,10 +408,15 @@ app.use(bodyparser.urlencoded({extended:true}));
 	});
 
 
-	//Google Map
-	app.get('/api/companyMap', function(req, res) {
-
-		let latlng = '40.7508303,-73.97677999999996';
+	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	//                   Google Map Api
+	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	app.post('/api/addressMap', function(req, res) {
+		console.log('I get the addressCODE from client!!!', req.body.data);
+		console.log('Sepreate code 01: ', req.body.data.lat);
+		console.log('Sepreate code 02: ', req.body.data.lng);
+		let latlng = req.body.data.lat+','+req.body.data.lng;
+		console.log("latlng: ", latlng);
 
 		let options = {
 			uri: "https://maps.googleapis.com/maps/api/geocode/json?",
@@ -424,10 +429,11 @@ app.use(bodyparser.urlencoded({extended:true}));
 		};
 		rp(options)
 		.then(function(response) {
-			console.log("This is response!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: ", response);
+			console.log("This is address response!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: ", response);
 			res.status(200).send(response);
 		})
 		.catch(function(err) {
+			console.log('can not get data from google');
 			res.status(400).send('Something\s wrong, please try again!')
 		})
 	});
@@ -455,6 +461,40 @@ app.use(bodyparser.urlencoded({extended:true}));
 			res.status(400).send('Something\s wrong, please try again!')
 		})
 	});
+
+	app.post('/api/directionData', function(req, res) {
+		console.log('I get the DATAAAAAAAAAAAAAAAAA from client!!!', req.body.origin);
+		
+		let origin = req.body.origin;
+		let destination = req.body.destination;
+		let mode = req.body.mode.toLowerCase();
+
+		let options = {
+			uri: "https://maps.googleapis.com/maps/api/directions/json?",
+			qs: {
+				origin: origin,
+				destination: destination,
+				mode: mode
+			},
+			headers: {
+				key : config.apiKeys.googleMap
+			}
+		};
+		rp(options)
+		.then(function(response) {
+			console.log("This is response!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: ", response);
+			res.status(200).send(response);
+		})
+		.catch(function(err) {
+			res.status(400).send('Something\s wrong, please try again!')
+		})
+	});
+
+
+
+
+
+
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//                    Authentication
