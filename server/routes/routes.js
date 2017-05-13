@@ -460,6 +460,40 @@ app.use(bodyparser.urlencoded({extended:true}));
 		})
 	});
 
+	app.post('/api/directionData', function(req, res) {
+		console.log('I get the DATAAAAAAAAAAAAAAAAA from client!!!', req.body.origin);
+		
+		let origin = req.body.origin;
+		let destination = req.body.destination;
+		let mode = req.body.mode;
+
+		let options = {
+			uri: "https://maps.googleapis.com/maps/api/directions/json?",
+			qs: {
+				origin: origin,
+				destination: destination,
+				mode: mode
+			},
+			headers: {
+				key : config.apiKeys.googleMap
+			}
+		};
+		rp(options)
+		.then(function(response) {
+			console.log("This is response!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: ", response);
+			res.status(200).send(response);
+		})
+		.catch(function(err) {
+			res.status(400).send('Something\s wrong, please try again!')
+		})
+	});
+
+
+
+
+
+
+
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//                    Authentication
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
