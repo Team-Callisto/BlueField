@@ -30,15 +30,55 @@ angular.module('app.services', [])
 				data: {data: address}
 			})
 			.then(function(res) {
-				console.log('this is res form GoogleMapApi: ', res.data);
-				console.log('this is the state from GoogleMapApi: ', res.data.results[0].address_components[5])
-				return res.data;
-				//return res.data.results[0].geometry.location;
+				console.log('this is res CODE form GoogleMapApi: ', res.data.results[0].geometry.location);
+				return res.data.results[0].geometry.location;
+
 			})
 			.catch(function(err) {
 				console.log(err)
 			})
+		},
+
+		getAddress: function(latlngCode) {
+			console.log('This is the latlngCode: ', latlngCode);
+			return $http({
+				method: 'POST',
+				url: '/api/addressMap',
+				data: {data: latlngCode}
+			})
+			.then(function(res) {
+				console.log('this is res ADDRESS from GoogleMapApi: ', res.data.results[1].formatted_address);
+				return res.data.results[1].formatted_address;
+			})
+			.catch(function(err) {
+				console.log(err);
+			})
+		},
+
+		getDirectionData: function(origin, destination, mode ) {
+			console.log('WWWWWWWWWWWWWWWWWWWWWW', origin, destination, mode);
+			return $http({
+				method: 'POST',
+				url: '/api/directionData',
+				data: {
+					origin: origin,
+					destination: destination,
+					mode: mode
+				}
+			})
+			.then(function(res) {
+				//console.log('this is res DIRECTIONDATA from GoogleMapApi: ', res.data.routes[0].legs[0]);
+				var directionDatas = {
+					distance: res.data.routes[0].legs[0].distance.text,
+					duration: res.data.routes[0].legs[0].duration.text
+				}
+				return directionDatas;
+			})
+			.catch(function(err) {
+				console.log(err);
+			})
 		}
+
   }
 })
 .factory('News', ($http) => {

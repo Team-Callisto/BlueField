@@ -6,6 +6,7 @@ angular.module('app.dashboard', [
   'jobWidget',
   'tasksWidget',
   'emailToneWidget',
+  'mapWidget',
   'chart.js'])
 .controller('dashboardController', function dashboardController($scope, Companies, User, Jobs, Tasks, Tone){
 

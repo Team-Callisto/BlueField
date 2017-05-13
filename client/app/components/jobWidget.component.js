@@ -58,8 +58,7 @@ angular.
             <p class="md-subhead"><strong>Featured Review: </strong></p><br><a href='https://www.glassdoor.com/index.htm'>powered by <img src='https://www.glassdoor.com/static/img/api/glassdoor_logo_80.png' title='Job Search' /></a>
             <md-button ng-click="$ctrl.queryGlassdoor()">Submit</md-button>
             <p class="md-subhead" ><strong>Address: </strong>{{$ctrl.data.address}}</p>
-
-            <p class="md-subhead" ng-init="$ctrl.googleMap($ctrl.data.address, $ctrl.data.officialName)" id="map" style="width: 800px; height: 600px"></p> 
+            <md-button ng-click="$ctrl.googleMap($ctrl.data.address, $ctrl.data.officialName)">Show Map</md-button>
 
             </md-content>
           </md-tab>
@@ -103,10 +102,7 @@ angular.
      data: '='
     },
 
-    controller: function($window, $scope, $http, $route, $mdDialog, Jobs, GoogleMap) {
-
-
-      let state;
+    controller: function($window, $scope, $route, $mdDialog, Jobs, GoogleMap, $rootScope) {
 
       // favorite icon
 
@@ -162,11 +158,14 @@ angular.
 
       ////////////////////Google Map///////////////////////////////////////////
       this.googleMap = function(address, companyName) {
+        $rootScope.displayMapFunc();
+        $rootScope.getAddressData(address);
+        $rootScope.hideDisplayDirection();
+        $rootScope.hideDisplayMapp();
+        window.scrollTo(0,400);
         GoogleMap.getLocationCode(address)
         .then(function(data){
-          console.log("Received geometry data from client server: ", data.results[0].geometry.location);
-          console.log("Received state name from client server: ", data.results[0].address_components[5].long_name);
-          state = data.results[0].address_components[5];
+
           var mapProp = {
           center:data.results[0].geometry.location,
           zoom:12,
@@ -189,6 +188,7 @@ angular.
       }
 
 
+
       // function handleLocationError(browserHasGeolocation, infoWindow, pos) {
       //   infoWindow.setPosition(pos);
       //   infoWindow.setContent(browserHasGeolocation ?
@@ -208,9 +208,6 @@ angular.
           // res.send(response.data);
         })
       };
-
-
-
 
 
       this.editJob = function($event) {
