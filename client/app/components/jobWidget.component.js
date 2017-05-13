@@ -55,8 +55,13 @@ angular.
             <p class="md-subhead"><strong>Description: </strong>{{$ctrl.data.description}}</p>
             <p class="md-subhead"><strong>Founded: </strong>{{$ctrl.data.founded}}</p>
             <p class="md-subhead"><strong># of Employees: </strong>{{$ctrl.data.approxEmployees}}</p>
-            <p class="md-subhead" ng-model="count"><strong>Featured Review:{{count}} </strong>{{reviews}}</p><br><a href='https://www.glassdoor.com/index.htm'>powered by <img src='https://www.glassdoor.com/static/img/api/glassdoor_logo_80.png' title='Job Search' /></a>
-            <md-button ng-click="$ctrl.queryGlassdoor()">Submit</md-button>
+            <p class="md-subhead"><strong>Average Rating:{{averageRating}}</strong>
+            <br>
+            <strong>Pros:</strong>{{pros}}
+            <br>
+            <strong>Cons: </strong>{{cons}}
+            </p><br><a href='https://www.glassdoor.com/index.htm'>powered by <img src='https://www.glassdoor.com/static/img/api/glassdoor_logo_80.png' title='Job Search' /></a>
+            <md-button ng-click="$ctrl.queryGlassdoor()">Get Glassdoor Review!</md-button>
             <p class="md-subhead" ><strong>Address: </strong>{{$ctrl.data.address}}</p>
 
 
@@ -191,22 +196,28 @@ angular.
       // }"Im an anime animal!"
       // this.count = 0;
       // this.reviews = "";
-      let rating;
-      $scope.reviews = rating;
+      // let rating;
+      // $scope.reviews = rating;
+      // $scope.pros;
+      // $scope.cons;
+      // $scope.averageRating
       this.queryGlassdoor = () =>{
         $http({
           method: "POST",
           url: "/api/glassdoor",
           data : {
-            q : $ctrl.data.officialName
+            q : $scope.jobs[0].company
           }
         }).then(function(response){
             let parsedBody = JSON.parse(response.data.body);
             // console.log("unparsedBody: " + response.data.body);
+
             // console.log("parsedBody employers:[ARR]; " + parsedBody.response.employers[0].overallRating)
-             rating = parsedBody.response.employers[0].overallRating
-            $scope.reviews = rating;
-            console.log(data.officialName);
+            $scope.pros = parsedBody.response.employers[0].featuredReview.pros;
+            $scope.cons = parsedBody.response.employers[0].featuredReview.cons;
+            $scope.averageRating = parsedBody.response.employers[0].overallRating;
+            console.log()
+            // console.log(JSON.stringify($scope.jobs[0].company) );
         })
       };
 
