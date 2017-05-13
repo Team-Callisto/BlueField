@@ -12,12 +12,25 @@ angular.
         </md-card-header-text>
       </md-card-header>
       <md-card-content>
+
         <p id="map" ng-show="mapp" style="width: 800px; height: 600px"></p>
-        <p id="directionsMap" ng-show="displayDirection" style="float:left;width: 400px; height: 600px"></p>
-        <p id="directionsPanel" ng-show="displayDirection" style="float:left;width: 400px; height: 600px"></p>
+        <p id="directionsMap" ng-show="displayDirection" style="float:left;width: 750px; height: 500px"></p>
+      
+        <md-card-actions ng-show="displayDirection" layout="column" layout-align=" end">
+          <md-button ng-click="directionDisplay()">Bus</md-button>
+        </md-card-actions>
+
+        <md-card-actions ng-show="displayDirection" layout="column" layout-align=" end">
+          <md-button ng-click="directionDisplay()">Car</md-button>
+        </md-card-actions>
+
+        <md-card-actions ng-show="displayDirection" layout="column" layout-align=" end">
+          <md-button ng-click="directionDisplay()">Bicycle</md-button>
+        </md-card-actions>
 
       </md-card-content>
-      <md-card-actions layout="row" layout-align="end center">
+
+      <md-card-actions layout="column" layout-align=" end">
         <md-button ng-click="directionDisplay()">Direction</md-button>
       </md-card-actions>
     </md-card>
@@ -73,7 +86,7 @@ angular.
           }
           map = new google.maps.Map(document.getElementById("directionsMap"), mapOptions);
           directionsDisplay.setMap(map);
-          directionsDisplay.setPanel(document.getElementById("directionsPanel"));
+          //directionsDisplay.setPanel(document.getElementById("directionsPanel"));
           return end;
         })
         .then(function(end) {

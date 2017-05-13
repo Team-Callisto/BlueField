@@ -314,7 +314,7 @@ angular.module('jobWidget').component('jobWidget', {
 angular.module('mapWidget', []);
 
 angular.module('mapWidget').component('mapWidget', {
-  template: '\n    <md-card ng-show="displayMap">\n      <md-card-header>\n        <md-card-header-text>\n          Company Location\n        </md-card-header-text>\n      </md-card-header>\n      <md-card-content>\n        <p id="map" ng-show="mapp" style="width: 800px; height: 600px"></p>\n        <p id="directionsMap" ng-show="displayDirection" style="float:left;width: 400px; height: 600px"></p>\n        <p id="directionsPanel" ng-show="displayDirection" style="float:left;width: 400px; height: 600px"></p>\n\n      </md-card-content>\n      <md-card-actions layout="row" layout-align="end center">\n        <md-button ng-click="directionDisplay()">Direction</md-button>\n      </md-card-actions>\n    </md-card>\n    ',
+  template: '\n    <md-card ng-show="displayMap">\n      <md-card-header>\n        <md-card-header-text>\n          Company Location\n        </md-card-header-text>\n      </md-card-header>\n      <md-card-content>\n\n        <p id="map" ng-show="mapp" style="width: 800px; height: 600px"></p>\n        <p id="directionsMap" ng-show="displayDirection" style="float:left;width: 750px; height: 500px"></p>\n      \n        <md-card-actions ng-show="displayDirection" layout="column" layout-align=" end">\n          <md-button ng-click="directionDisplay()">Bus</md-button>\n        </md-card-actions>\n\n        <md-card-actions ng-show="displayDirection" layout="column" layout-align=" end">\n          <md-button ng-click="directionDisplay()">Car</md-button>\n        </md-card-actions>\n\n        <md-card-actions ng-show="displayDirection" layout="column" layout-align=" end">\n          <md-button ng-click="directionDisplay()">Bicycle</md-button>\n        </md-card-actions>\n\n      </md-card-content>\n\n      <md-card-actions layout="column" layout-align=" end">\n        <md-button ng-click="directionDisplay()">Direction</md-button>\n      </md-card-actions>\n    </md-card>\n    ',
   binding: {
     data: '='
   },
@@ -363,7 +363,7 @@ angular.module('mapWidget').component('mapWidget', {
             };
             map = new google.maps.Map(document.getElementById("directionsMap"), mapOptions);
             directionsDisplay.setMap(map);
-            directionsDisplay.setPanel(document.getElementById("directionsPanel"));
+            //directionsDisplay.setPanel(document.getElementById("directionsPanel"));
             return end;
           }).then(function (end) {
             var request = {
