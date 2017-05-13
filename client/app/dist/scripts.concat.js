@@ -603,7 +603,7 @@ angular.
     `
     <md-card ng-show="displayMap">
       <md-card-header>
-        <md-card-header-text>
+        <md-card-header-text class="md-title">
           Company Location
         </md-card-header-text>
       </md-card-header>
@@ -632,10 +632,10 @@ angular.
         </md-card-actions>
       </md-card-content>
 
-      <md-card-content ng-show="displayData" style="display:flex; justify-content:space-around; align-items:flex-start">
-        <div><p>Transportation: {{trans}}</p></div>
-        <div><p>Distance: {{dis}}</p></div>
-        <div><p>Time: {{totleTime}}</p></div>
+      <md-card-content ng-show="displayData" md-colors="{background:'GREY-600'}" style="display:flex; justify-content:space-around">
+        <div><p class="md-subhead">Transportation: {{trans}}</p></div>
+        <div><p class="md-subhead">Distance: {{dis}}</p></div>
+        <div><p class="md-subhead">Time: {{totleTime}}</p></div>
       </md-card-content>
 
       <md-card-actions ng-show="mapp" layout="column" layout-align=" stretch">
