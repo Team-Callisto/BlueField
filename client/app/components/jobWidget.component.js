@@ -143,17 +143,14 @@ angular.
           })
         }
       }
-      // this.googleMap = function() {
-        
-      // }
 
       this.googleMap = function(address, companyName) {
         $rootScope.displayMapFunc();
+        $rootScope.getAddressData(address);
         window.scrollTo(0,400);
-        console.log('insideGoogleMap scope', $rootScope.showMapComp)
         GoogleMap.getLocationCode(address)
         .then(function(data){
-          console.log(data);
+          //console.log(data);
           var mapProp = {
           center:data,
           zoom:12,
@@ -175,12 +172,6 @@ angular.
         })
       }
 
-      // function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-      //   infoWindow.setPosition(pos);
-      //   infoWindow.setContent(browserHasGeolocation ?
-      //                         'Error: The Geolocation service failed.' :
-      //                         'Error: Your browser doesn\'t support geolocation.');
-      // }
 
 
 

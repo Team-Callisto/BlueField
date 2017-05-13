@@ -384,17 +384,14 @@ angular.
           })
         }
       }
-      // this.googleMap = function() {
-        
-      // }
 
       this.googleMap = function(address, companyName) {
         $rootScope.displayMapFunc();
+        $rootScope.getAddressData(address);
         window.scrollTo(0,400);
-        console.log('insideGoogleMap scope', $rootScope.showMapComp)
         GoogleMap.getLocationCode(address)
         .then(function(data){
-          console.log(data);
+          //console.log(data);
           var mapProp = {
           center:data,
           zoom:12,
@@ -416,12 +413,6 @@ angular.
         })
       }
 
-      // function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-      //   infoWindow.setPosition(pos);
-      //   infoWindow.setContent(browserHasGeolocation ?
-      //                         'Error: The Geolocation service failed.' :
-      //                         'Error: Your browser doesn\'t support geolocation.');
-      // }
 
 
 
@@ -594,17 +585,73 @@ angular.
         <p id="map" style="width: 800px; height: 600px"></p>
       </md-card-content>
       <md-card-actions layout="row" layout-align="end center">
-        <md-button ng-click="analyzeText()">Direction</md-button>
+        <md-button ng-click="directionDisplay()">Direction</md-button>
       </md-card-actions>
     </md-card>
     `,
     binding: {
       data: '='
     },
-    controller: function($scope, $rootScope) {
+    controller: function($scope, $rootScope, GoogleMap) {
+
+      let currentAddress;
+      let directionsService;
+      let directionDisplay;
+
+
       $rootScope.displayMapFunc = function() {
         $scope.displayMap = true;
       }
+
+      $rootScope.getAddressData = function(address) {
+        currentAddress = address;
+      }
+      
+      $scope.directionDisplay = function() {
+
+      directionsService = new google.maps.DirectionsService();
+      directionsDisplay = new google.maps.DirectionsRenderer();
+
+      if (navigator.geolocation) { 
+        navigator.geolocation.getCurrentPosition(function (position) { 
+        var coords = position.coords; 
+        console.log('latitude: ', coords.latitude);
+        console.log('longitude: ', coords.longitude);
+        latlng = new google.maps.LatLng(coords.latitude, coords.longitude); 
+        GoogleMap.getAddress(latlng)
+        .then(function(end) {
+          console.log(end);
+          console.log(currentAddress);
+
+          var mapOptions = {
+            zoom: 7,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            center: latlng
+          }
+          map = new google.maps.Map(document.getElementById("map"), mapOptions);
+          directionsDisplay.setMap(map);
+          return end;
+        })
+        .then(function(end) {
+          var request = {
+            origin: currentAddress,
+            destination: end,
+            travelMode: google.maps.TravelMode.DRIVING
+          };
+          directionsService.route(request, function(response, status) {
+            console.log(status);
+            if(status === 'OK') {
+              directionsDisplay.setDirections(response);
+            }
+          });
+        })
+          });
+        }
+      }
+
+
+
+
     }
   });
 ;
@@ -1181,13 +1228,30 @@ angular.module('app.services', [])
 				data: {data: address}
 			})
 			.then(function(res) {
-				console.log('this is res form GoogleMapApi: ', res.data.results[0].geometry.location);
+				console.log('this is res CODE form GoogleMapApi: ', res.data.results[0].geometry.location);
 				return res.data.results[0].geometry.location;
 			})
 			.catch(function(err) {
 				console.log(err)
 			})
+		},
+
+		getAddress: function(latlngCode) {
+			console.log('This is the latlngCode: ', latlngCode);
+			return $http({
+				method: 'POST',
+				url: '/api/addressMap',
+				data: {data: latlngCode}
+			})
+			.then(function(res) {
+				console.log('this is res ADDRESS from GoogleMapApi: ', res.data.results[1].formatted_address);
+				return res.data.results[1].formatted_address;
+			})
+			.catch(function(err) {
+				console.log(err);
+			})
 		}
+
   }
 })
 .factory('News', ($http) => {

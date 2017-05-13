@@ -30,13 +30,30 @@ angular.module('app.services', [])
 				data: {data: address}
 			})
 			.then(function(res) {
-				console.log('this is res form GoogleMapApi: ', res.data.results[0].geometry.location);
+				console.log('this is res CODE form GoogleMapApi: ', res.data.results[0].geometry.location);
 				return res.data.results[0].geometry.location;
 			})
 			.catch(function(err) {
 				console.log(err)
 			})
+		},
+
+		getAddress: function(latlngCode) {
+			console.log('This is the latlngCode: ', latlngCode);
+			return $http({
+				method: 'POST',
+				url: '/api/addressMap',
+				data: {data: latlngCode}
+			})
+			.then(function(res) {
+				console.log('this is res ADDRESS from GoogleMapApi: ', res.data.results[1].formatted_address);
+				return res.data.results[1].formatted_address;
+			})
+			.catch(function(err) {
+				console.log(err);
+			})
 		}
+
   }
 })
 .factory('News', ($http) => {
