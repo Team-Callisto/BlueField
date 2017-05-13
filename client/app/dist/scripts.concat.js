@@ -355,12 +355,6 @@ angular.
 
     controller: function($window, $scope, $http, $route, $mdDialog, Jobs, GoogleMap) {
 
-
-
-      let state;
-
-      // favorite icon
-
       this.favorite = false;
 
       Jobs.get().then(function(data) {
@@ -435,37 +429,29 @@ angular.
       //   infoWindow.setContent(browserHasGeolocation ?
       //                         'Error: The Geolocation service failed.' :
       //                         'Error: Your browser doesn\'t support geolocation.');
-      // }"Im an anime animal!"
-      // this.count = 0;
-      // this.reviews = "";
-      // let rating;
-      // $scope.reviews = rating;
-      // $scope.pros;
-      // $scope.cons;
-      // $scope.averageRating
-      this.queryGlassdoor = () =>{
+      // }
+      this.queryGlassdoor = function() {
+        console.log("this should be meetup: " +  JSON.stringify($scope.jobs[0].company));
+        console.log("this should be squarespace: " + JSON.stringify($scope.jobs[1].company));
+        console.log(this);
         $http({
           method: "POST",
           url: "/api/glassdoor",
           data : {
-            q : $scope.jobs[0].company
+            q : this.data.company
           }
+          // console.log($scope.jobs[1].company)
         }).then(function(response){
-            let parsedBody = JSON.parse(response.data.body);
-            // console.log("unparsedBody: " + response.data.body);
+            // console.log('hello world');
 
-            // console.log("parsedBody employers:[ARR]; " + parsedBody.response.employers[0].overallRating)
+            let parsedBody = JSON.parse(response.data.body);
+
             $scope.pros = parsedBody.response.employers[0].featuredReview.pros;
             $scope.cons = parsedBody.response.employers[0].featuredReview.cons;
             $scope.averageRating = parsedBody.response.employers[0].overallRating;
-            console.log()
-            // console.log(JSON.stringify($scope.jobs[0].company) );
+
         })
       };
-
-
-
-
 
       this.editJob = function($event) {
         var parentEl = angular.element(document.body)
@@ -885,21 +871,6 @@ angular.module('app.dashboard', [
               angular.lowercase(job.position).indexOf(angular.lowercase($scope.search) || '') !== -1);
   };
 
-  // $scope.reviews;
-  $scope.queryGlassdoor = function(){
-    $http({
-      method: "POST",
-      url: "/api/glassdoor",
-      data : {
-        q : $scope.searchGlassdoor
-      }
-    }).then(function(response){
-
-      console.log(response);
-      // $scope.reviews = response.data;
-
-    })
-  };
 });
 ;
 angular.module('app.input', [
