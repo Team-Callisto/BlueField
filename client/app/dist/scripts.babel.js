@@ -314,7 +314,7 @@ angular.module('jobWidget').component('jobWidget', {
 angular.module('mapWidget', []);
 
 angular.module('mapWidget').component('mapWidget', {
-  template: '\n    <md-card ng-show="displayMap">\n      <md-card-header>\n        <md-card-header-text>\n          Company Location\n        </md-card-header-text>\n      </md-card-header>\n      <md-card-content>\n\n        <p id="map" ng-show="mapp" style="width: 800px; height: 600px"></p>\n        <p id="directionsMap" ng-show="displayDirection" style="float:left;width: 750px; height: 500px"></p>\n      \n        <md-card-actions ng-show="displayDirection" layout="column" layout-align=" end">\n          <md-button ng-click="directionDisplay()">Bus</md-button>\n        </md-card-actions>\n\n        <md-card-actions ng-show="displayDirection" layout="column" layout-align=" end">\n          <md-button ng-click="directionDisplay()">Car</md-button>\n        </md-card-actions>\n\n        <md-card-actions ng-show="displayDirection" layout="column" layout-align=" end">\n          <md-button ng-click="directionDisplay()">Bicycle</md-button>\n        </md-card-actions>\n\n      </md-card-content>\n\n      <md-card-actions layout="column" layout-align=" end">\n        <md-button ng-click="directionDisplay()">Direction</md-button>\n      </md-card-actions>\n    </md-card>\n    ',
+  template: '\n    <md-card ng-show="displayMap">\n      <md-card-header>\n        <md-card-header-text>\n          Company Location\n        </md-card-header-text>\n      </md-card-header>\n      <md-card-content>\n\n        <p id="map" ng-show="mapp" style="width: 850px; height: 600px"></p>\n        <p id="directionsMap" ng-show="displayDirection" style="float:left;width: 850px; height: 450px"></p>\n\n      </md-card-content>\n\n      <md-card-content layout="row" layout-align="center center">\n        <md-card-actions ng-show="displayDirection" >\n          <md-button ng-click="displayFeature(\'TRANSIT\')">Bus</md-button>\n        </md-card-actions>\n\n        <md-card-actions ng-show="displayDirection" >\n          <md-button ng-click="displayFeature(\'DRIVING\')">Car</md-button>\n        </md-card-actions>\n\n        <md-card-actions ng-show="displayDirection" >\n          <md-button ng-click="displayFeature(\'BICYCLING\')">Bicycle</md-button>\n        </md-card-actions>\n\n        <md-card-actions ng-show="displayDirection" >\n          <md-button ng-click="displayFeature(\'WALKING\')">Walk</md-button>\n        </md-card-actions>\n      </md-card-content>\n\n      <md-card-content>\n        <p ng-show="displayDirection" stype="float:left" layout="column" layout-align="center none">Distance: </p>\n        <p ng-show="displayDirection" stype="float:left" layout="column" layout-align="center none">Time: </p>\n      </md-card-content>\n\n      <md-card-actions ng-show="mapp" layout="row" layout-align="center start">\n        <md-button ng-click="directionDisplay()">Direction</md-button>\n      </md-card-actions>\n    </md-card>\n    ',
   binding: {
     data: '='
   },
@@ -370,6 +370,50 @@ angular.module('mapWidget').component('mapWidget', {
               origin: end,
               destination: currentAddress,
               travelMode: google.maps.TravelMode.DRIVING
+            };
+            directionsService.route(request, function (response, status) {
+              console.log(status);
+              if (status === 'OK') {
+                directionsDisplay.setDirections(response);
+              }
+            });
+          });
+        });
+      }
+    };
+
+    $scope.displayFeature = function (transportation) {
+      console.log("transportation Gos here", transportation);
+      directionsService = new google.maps.DirectionsService();
+      directionsDisplay = new google.maps.DirectionsRenderer();
+      $scope.displayDirection = true;
+      $scope.mapp = false;
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          var coords = position.coords;
+          console.log('latitude: ', coords.latitude);
+          console.log('longitude: ', coords.longitude);
+          latlng = new google.maps.LatLng(coords.latitude, coords.longitude);
+          GoogleMap.getAddress(latlng).then(function (end) {
+            console.log(end);
+            console.log(currentAddress);
+
+            var mapOptions = {
+              zoom: 7,
+              mapTypeId: google.maps.MapTypeId.ROADMAP,
+              center: latlng
+            };
+            map = new google.maps.Map(document.getElementById("directionsMap"), mapOptions);
+            directionsDisplay.setMap(map);
+            //directionsDisplay.setPanel(document.getElementById("directionsPanel"));
+            return end;
+          }).then(function (end) {
+            console.log("transportation Gos here", transportation);
+            var way = google.maps.TravelMode[transportation];
+            var request = {
+              origin: end,
+              destination: currentAddress,
+              travelMode: way
             };
             directionsService.route(request, function (response, status) {
               console.log(status);
