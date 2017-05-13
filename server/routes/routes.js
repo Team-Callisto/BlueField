@@ -582,6 +582,7 @@ app.use(bodyparser.urlencoded({extended:true}));
 	  if (error) throw new Error(error);
 
 	  let parsedBody = JSON.parse(body);
+		// const parsedBody =
     console.log(parsedBody.response.employers[0].overallRating);
 		res.status(200).json(response);
 

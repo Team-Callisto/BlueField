@@ -55,7 +55,7 @@ angular.
             <p class="md-subhead"><strong>Description: </strong>{{$ctrl.data.description}}</p>
             <p class="md-subhead"><strong>Founded: </strong>{{$ctrl.data.founded}}</p>
             <p class="md-subhead"><strong># of Employees: </strong>{{$ctrl.data.approxEmployees}}</p>
-            <p class="md-subhead"><strong>Featured Review: </strong>{{$scope.reviews}}</p><br><a href='https://www.glassdoor.com/index.htm'>powered by <img src='https://www.glassdoor.com/static/img/api/glassdoor_logo_80.png' title='Job Search' /></a>
+            <p class="md-subhead" ng-model="count"><strong>Featured Review:{{count}} </strong>{{reviews}}</p><br><a href='https://www.glassdoor.com/index.htm'>powered by <img src='https://www.glassdoor.com/static/img/api/glassdoor_logo_80.png' title='Job Search' /></a>
             <md-button ng-click="$ctrl.queryGlassdoor()">Submit</md-button>
             <p class="md-subhead" ><strong>Address: </strong>{{$ctrl.data.address}}</p>
 
@@ -188,20 +188,25 @@ angular.
       //   infoWindow.setContent(browserHasGeolocation ?
       //                         'Error: The Geolocation service failed.' :
       //                         'Error: Your browser doesn\'t support geolocation.');
-      // }
-
-      $scope.reviews;;
-      this.queryGlassdoor = function(){
+      // }"Im an anime animal!"
+      // this.count = 0;
+      // this.reviews = "";
+      let rating;
+      $scope.reviews = rating;
+      this.queryGlassdoor = () =>{
         $http({
           method: "POST",
           url: "/api/glassdoor",
           data : {
-            q : $scope.searchGlassdoor
+            q : $ctrl.data.officialName
           }
         }).then(function(response){
-
-          console.log("response From queryGlassdoor:" + response);
-            $scope.reviews = response.data;
+            let parsedBody = JSON.parse(response.data.body);
+            // console.log("unparsedBody: " + response.data.body);
+            // console.log("parsedBody employers:[ARR]; " + parsedBody.response.employers[0].overallRating)
+             rating = parsedBody.response.employers[0].overallRating
+            $scope.reviews = rating;
+            console.log(data.officialName);
         })
       };
 
