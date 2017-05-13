@@ -389,14 +389,6 @@ angular.
      data: '='
     },
 
-
-
-
-      // favorite icon
-
-
-
-
     controller: function($window, $scope, $rootScope, $http, $route, $mdDialog, Jobs, GoogleMap) {
 
       this.favorite = false;
