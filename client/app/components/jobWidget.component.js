@@ -64,8 +64,7 @@ angular.
             <md-button ng-click="$ctrl.queryGlassdoor()">Get Glassdoor Review!</md-button>
             <p class="md-subhead" ><strong>Address: </strong>{{$ctrl.data.address}}</p>
 
-
-            <p class="md-subhead" ng-init="$ctrl.googleMap($ctrl.data.address, $ctrl.data.officialName)" id="map" style="width: 800px; height: 600px"></p>
+            <md-button ng-click="$ctrl.googleMap($ctrl.data.address, $ctrl.data.officialName)">Show Map</md-button>
 
 
             </md-content>
@@ -109,6 +108,13 @@ angular.
     bindings: {
      data: '='
     },
+
+
+  
+
+      // favorite icon
+
+
 
 
     controller: function($window, $scope, $http, $route, $mdDialog, Jobs, GoogleMap) {
@@ -158,9 +164,14 @@ angular.
 
 
       this.googleMap = function(address, companyName) {
+        $rootScope.displayMapFunc();
+        $rootScope.getAddressData(address);
+        $rootScope.hideDisplayDirection();
+        $rootScope.hideDisplayMapp();
+        window.scrollTo(0,400);
         GoogleMap.getLocationCode(address)
         .then(function(data){
-          console.log(data);
+
           var mapProp = {
           center:data,
           zoom:12,
@@ -171,16 +182,17 @@ angular.
             position:data,
             });
           marker.setMap(map);
-          var infoWindow = new google.maps.InfoWindow({
+          var infoWindow = new google.maps.InfoWindow({ 
             content: companyName
-            });
-          infoWindow.open(map, marker);
-
+            }); 
+          infoWindow.open(map, marker); 
+          
         })
         .catch(function(err) {
           console.log(err);
         })
       }
+
 
       // function handleLocationError(browserHasGeolocation, infoWindow, pos) {
       //   infoWindow.setPosition(pos);
@@ -188,10 +200,9 @@ angular.
       //                         'Error: The Geolocation service failed.' :
       //                         'Error: Your browser doesn\'t support geolocation.');
       // }
-      this.queryGlassdoor = function() {
-        console.log("this should be meetup: " +  JSON.stringify($scope.jobs[0].company));
-        console.log("this should be squarespace: " + JSON.stringify($scope.jobs[1].company));
-        console.log(this);
+
+      this.queryGlassdoor = function(){
+
         $http({
           method: "POST",
           url: "/api/glassdoor",
@@ -202,6 +213,7 @@ angular.
         }).then(function(response){
             // console.log('hello world');
 
+
             let parsedBody = JSON.parse(response.data.body);
 
             $scope.pros = parsedBody.response.employers[0].featuredReview.pros;
@@ -210,7 +222,6 @@ angular.
 
         })
       };
-
       this.editJob = function($event) {
         var parentEl = angular.element(document.body)
         $mdDialog.show({

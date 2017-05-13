@@ -134,24 +134,20 @@ angular.
   component('emailToneWidget', {
     template:
     `
-    <md-card>
-
-      <md-card-header>
-        <md-card-header-text>
-          <md-input-container class="md-block">
-            <label>Email to Analyze</label>
-            <textarea ng-model="textToAnalyze" rows="10" md-select-on-focus></textarea>
-          </md-input-container>
-        </md-card-header-text>
-      </md-card-header>
+    <md-card class="tone-card-input">
+      <md-card-content>
+        <md-input-container class="md-block">
+          <label>Email to Analyze</label>
+          <textarea ng-model="textToAnalyze" rows="10" md-select-on-focus></textarea>
+        </md-input-container>
+      </md-card-content>
       <md-card-actions layout="row" layout-align="end center">
-        <md-button ng-click="analyzeText()">Analyze Tone</md-button>
+        <md-button class="nav-btn md-raised md-accent md-button md-ink-ripple" ng-click="analyzeText()">Analyze Tone</md-button>
       </md-card-actions>
     </md-card>
 
     <md-card ng-show="analyzed">
-      <md-card-header>
-        <md-card-header-text>
+      <md-card-content>
           <canvas id="emotionTone" class="chart-horizontal-bar"
             chart-data="[emotionToneData]" chart-labels="emotionToneLabels" >
           </canvas>
@@ -161,8 +157,8 @@ angular.
           <canvas id="socialTone" class="chart chart-radar"
             chart-data="[socialToneData]" chart-labels="socialToneLabels" >
           </canvas>
-        </md-card-header-text>
-      </md-card-header>
+
+      </md-card-content>
     </md-card>
     `,
     controller: function($scope, Tone) {
@@ -306,8 +302,7 @@ angular.
             <md-button ng-click="$ctrl.queryGlassdoor()">Get Glassdoor Review!</md-button>
             <p class="md-subhead" ><strong>Address: </strong>{{$ctrl.data.address}}</p>
 
-
-            <p class="md-subhead" ng-init="$ctrl.googleMap($ctrl.data.address, $ctrl.data.officialName)" id="map" style="width: 800px; height: 600px"></p>
+            <md-button ng-click="$ctrl.googleMap($ctrl.data.address, $ctrl.data.officialName)">Show Map</md-button>
 
 
             </md-content>
@@ -353,7 +348,8 @@ angular.
     },
 
 
-    controller: function($window, $scope, $http, $route, $mdDialog, Jobs, GoogleMap) {
+
+    controller: function($window, $scope, $http, $route, $mdDialog, Jobs, GoogleMap, $rootScope) {
 
       this.favorite = false;
 
@@ -399,10 +395,19 @@ angular.
       }
 
 
+
+
+      ////////////////////Google Map///////////////////////////////////////////
+
       this.googleMap = function(address, companyName) {
+        $rootScope.displayMapFunc();
+        $rootScope.getAddressData(address);
+        $rootScope.hideDisplayDirection();
+        $rootScope.hideDisplayMapp();
+        window.scrollTo(0,400);
         GoogleMap.getLocationCode(address)
         .then(function(data){
-          console.log(data);
+
           var mapProp = {
           center:data,
           zoom:12,
@@ -413,27 +418,19 @@ angular.
             position:data,
             });
           marker.setMap(map);
-          var infoWindow = new google.maps.InfoWindow({
+          var infoWindow = new google.maps.InfoWindow({ 
             content: companyName
-            });
-          infoWindow.open(map, marker);
-
+            }); 
+          infoWindow.open(map, marker); 
+          
         })
         .catch(function(err) {
           console.log(err);
         })
       }
 
-      // function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-      //   infoWindow.setPosition(pos);
-      //   infoWindow.setContent(browserHasGeolocation ?
-      //                         'Error: The Geolocation service failed.' :
-      //                         'Error: Your browser doesn\'t support geolocation.');
-      // }
-      this.queryGlassdoor = function() {
-        console.log("this should be meetup: " +  JSON.stringify($scope.jobs[0].company));
-        console.log("this should be squarespace: " + JSON.stringify($scope.jobs[1].company));
-        console.log(this);
+      this.queryGlassdoor = function(){
+
         $http({
           method: "POST",
           url: "/api/glassdoor",
@@ -443,6 +440,7 @@ angular.
           // console.log($scope.jobs[1].company)
         }).then(function(response){
             // console.log('hello world');
+
 
             let parsedBody = JSON.parse(response.data.body);
 
@@ -593,6 +591,210 @@ angular.
           }
         })
       }
+    }
+  });
+;
+angular.module('mapWidget', []);
+
+angular.
+  module('mapWidget').
+  component('mapWidget', {
+    template:
+    `
+    <md-card ng-show="displayMap">
+      <md-card-header>
+        <md-card-header-text>
+          Company Location
+        </md-card-header-text>
+      </md-card-header>
+      <md-card-content>
+
+        <p id="map" ng-show="mapp" style="width: 850px; height: 600px"></p>
+        <p id="directionsMap" ng-show="displayDirection" style="float:left;width: 850px; height: 450px"></p>
+
+      </md-card-content>
+
+      <md-card-content ng-show="displayData" layout="row" layout-align="center center">
+        <md-card-actions >
+          <md-button ng-click="displayFeature('TRANSIT')">TRANSIT</md-button>
+        </md-card-actions>
+
+        <md-card-actions >
+          <md-button ng-click="displayFeature('DRIVING')">DRIVING</md-button>
+        </md-card-actions>
+
+        <md-card-actions >
+          <md-button ng-click="displayFeature('BICYCLING')">BICYCLING</md-button>
+        </md-card-actions>
+
+        <md-card-actions >
+          <md-button ng-click="displayFeature('WALKING')">WALKING</md-button>
+        </md-card-actions>
+      </md-card-content>
+
+      <md-card-content ng-show="displayData" style="display:flex; justify-content:space-around; align-items:flex-start">
+        <div><p>Transportation: {{trans}}</p></div>
+        <div><p>Distance: {{dis}}</p></div>
+        <div><p>Time: {{totleTime}}</p></div>
+      </md-card-content>
+
+      <md-card-actions ng-show="mapp" layout="column" layout-align=" stretch">
+        <md-button ng-click="directionDisplay()">Direction</md-button>
+        <br>
+      </md-card-actions>
+      
+    </md-card>
+    `,
+    binding: {
+      data: '='
+    },
+    controller: function($scope, $rootScope, GoogleMap) {
+
+      let currentAddress;
+      let directionsService;
+      let directionsDisplay;
+      let originAddress;
+
+
+      $rootScope.displayMapFunc = function() {
+        $scope.displayMap = true;
+      }
+
+      $rootScope.getAddressData = function(address) {
+        currentAddress = address;
+      }
+
+      $rootScope.hideDisplayDirection = function() {
+        $scope.displayDirection = false;
+        $scope.displayData = false;
+      }
+
+      $rootScope.hideDisplayMapp = function() {
+        $scope.mapp = true;
+      }
+
+      
+      $scope.directionDisplay = function() {
+
+      directionsService = new google.maps.DirectionsService();
+      directionsDisplay = new google.maps.DirectionsRenderer();
+      $scope.displayDirection = true;
+      $scope.mapp = false;
+      if (navigator.geolocation) { 
+        navigator.geolocation.getCurrentPosition(function (position) { 
+        var coords = position.coords; 
+        console.log('latitude: ', coords.latitude);
+        console.log('longitude: ', coords.longitude);
+        latlng = new google.maps.LatLng(coords.latitude, coords.longitude); 
+        GoogleMap.getAddress(latlng)
+        .then(function(end) {
+          console.log(end);
+          console.log(currentAddress);
+
+          var mapOptions = {
+            zoom: 7,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            center: latlng
+          }
+          map = new google.maps.Map(document.getElementById("directionsMap"), mapOptions);
+          directionsDisplay.setMap(map);
+          //directionsDisplay.setPanel(document.getElementById("directionsPanel"));
+          return end;
+        })
+        .then(function(end) {
+          var request = {
+            origin: end,
+            destination: currentAddress,
+            travelMode: google.maps.TravelMode.DRIVING
+          };
+          directionsService.route(request, function(response, status) {
+            console.log(status);
+            if(status === 'OK') {
+              directionsDisplay.setDirections(response);
+            }
+          });
+          return end;
+        })
+        .then(function(end) {
+            $scope.displayData = true;
+            return end;
+          })
+        .then(function(end) {
+          GoogleMap.getDirectionData(end, currentAddress, 'DRIVING')
+          .then(function(datas) {
+            $scope.trans = 'DRIVING';
+            $scope.totleTime = datas.duration;
+            $scope.dis = datas.distance;
+          })
+        })
+
+          });
+        }
+      }
+
+
+      $scope.displayFeature = function(transportation) {
+      console.log("transportation Gos here", transportation)
+      directionsService = new google.maps.DirectionsService();
+      directionsDisplay = new google.maps.DirectionsRenderer();
+      $scope.displayDirection = true;
+      $scope.mapp = false;
+      if (navigator.geolocation) { 
+        navigator.geolocation.getCurrentPosition(function (position) { 
+        var coords = position.coords; 
+        console.log('latitude: ', coords.latitude);
+        console.log('longitude: ', coords.longitude);
+        latlng = new google.maps.LatLng(coords.latitude, coords.longitude); 
+        GoogleMap.getAddress(latlng)
+        .then(function(end) {
+          console.log(end);
+          console.log(currentAddress);
+
+          var mapOptions = {
+            zoom: 7,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            center: latlng
+          }
+          map = new google.maps.Map(document.getElementById("directionsMap"), mapOptions);
+          directionsDisplay.setMap(map);
+          //directionsDisplay.setPanel(document.getElementById("directionsPanel"));
+          return end;
+        })
+        .then(function(end) {
+          console.log("transportation Gos here", transportation)
+          var way = google.maps.TravelMode[transportation];
+          originAddress = end
+          var request = {
+            origin: end,
+            destination: currentAddress,
+            travelMode: way
+          };
+          directionsService.route(request, function(response, status) {
+            console.log(status);
+            if(status === 'OK') {
+              directionsDisplay.setDirections(response);
+            }
+          });
+          return transportation;
+        })
+        .then(function(mode) {
+          GoogleMap.getDirectionData(originAddress, currentAddress, mode)
+          .then(function(datas) {
+            console.log("LASTONEEEEEEEEE!!!!!!", datas)
+            $scope.totleTime = datas.duration;
+            $scope.dis = datas.distance;
+            $scope.trans = mode;
+          })
+        })
+
+
+
+
+          });
+        }
+      }
+
+
     }
   });
 ;
@@ -831,6 +1033,7 @@ angular.module('app.dashboard', [
   'jobWidget',
   'tasksWidget',
   'emailToneWidget',
+  'mapWidget',
   'chart.js'])
 .controller('dashboardController', function dashboardController($scope, Companies, User, Jobs, Tasks, Tone){
 
@@ -1153,15 +1356,56 @@ angular.module('app.services', [])
 				data: {data: address}
 			})
 			.then(function(res) {
-				console.log('this is res form GoogleMapApi: ', res.data);
-				console.log('this is the state from GoogleMapApi: ', res.data.results[0].address_components[5])
-				return res.data;
-				//return res.data.results[0].geometry.location;
+				console.log('this is res CODE form GoogleMapApi: ', res.data.results[0].geometry.location);
+				return res.data.results[0].geometry.location;
+
 			})
 			.catch(function(err) {
 				console.log(err)
 			})
+		},
+
+		getAddress: function(latlngCode) {
+			console.log('This is the latlngCode: ', latlngCode);
+			return $http({
+				method: 'POST',
+				url: '/api/addressMap',
+				data: {data: latlngCode}
+			})
+			.then(function(res) {
+				console.log('this is res ADDRESS from GoogleMapApi: ', res.data.results[1].formatted_address);
+				return res.data.results[1].formatted_address;
+			})
+			.catch(function(err) {
+				console.log(err);
+			})
+		},
+
+		getDirectionData: function(origin, destination, mode ) {
+			console.log('WWWWWWWWWWWWWWWWWWWWWW', origin, destination, mode);
+			return $http({
+				method: 'POST',
+				url: '/api/directionData',
+				data: {
+					origin: origin,
+					destination: destination,
+					mode: mode
+				}
+			})
+			.then(function(res) {
+				//console.log('this is res DIRECTIONDATA from GoogleMapApi: ', res.data.routes[0].legs[0]);
+				var directionDatas = {
+					distance: res.data.routes[0].legs[0].distance.text,
+					duration: res.data.routes[0].legs[0].duration.text,
+					mode: mode
+				}
+				return directionDatas;
+			})
+			.catch(function(err) {
+				console.log(err);
+			})
 		}
+
   }
 })
 .factory('News', ($http) => {
