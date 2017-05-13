@@ -331,7 +331,7 @@ angular.module('jobWidget').component('jobWidget', {
 angular.module('mapWidget', []);
 
 angular.module('mapWidget').component('mapWidget', {
-  template: '\n    <md-card ng-show="displayMap">\n      <md-card-header>\n        <md-card-header-text>\n          Company Location\n        </md-card-header-text>\n      </md-card-header>\n      <md-card-content>\n\n        <p id="map" ng-show="mapp" style="width: 850px; height: 600px"></p>\n        <p id="directionsMap" ng-show="displayDirection" style="float:left;width: 850px; height: 450px"></p>\n\n      </md-card-content>\n\n      <md-card-content ng-show="displayData" layout="row" layout-align="center center">\n        <md-card-actions >\n          <md-button ng-click="displayFeature(\'TRANSIT\')">Bus</md-button>\n        </md-card-actions>\n\n        <md-card-actions >\n          <md-button ng-click="displayFeature(\'DRIVING\')">Car</md-button>\n        </md-card-actions>\n\n        <md-card-actions >\n          <md-button ng-click="displayFeature(\'BICYCLING\')">Bicycle</md-button>\n        </md-card-actions>\n\n        <md-card-actions >\n          <md-button ng-click="displayFeature(\'WALKING\')">Walk</md-button>\n        </md-card-actions>\n      </md-card-content>\n\n      <md-card-content ng-show="displayData">\n        <p stype="float:left" layout="column" layout-align="center none">Distance: {{dis}}</p>\n        <p stype="float:left" layout="column" layout-align="center none">Time: {{totleTime}}</p>\n      </md-card-content>\n\n      <md-card-actions ng-show="mapp" layout="column" layout-align=" stretch">\n        <md-button ng-click="directionDisplay()">Direction</md-button>\n      </md-card-actions>\n      <br>\n    </md-card>\n    ',
+  template: '\n    <md-card ng-show="displayMap">\n      <md-card-header>\n        <md-card-header-text>\n          Company Location\n        </md-card-header-text>\n      </md-card-header>\n      <md-card-content>\n\n        <p id="map" ng-show="mapp" style="width: 850px; height: 600px"></p>\n        <p id="directionsMap" ng-show="displayDirection" style="float:left;width: 850px; height: 450px"></p>\n\n      </md-card-content>\n\n      <md-card-content ng-show="displayData" layout="row" layout-align="center center">\n        <md-card-actions >\n          <md-button ng-click="displayFeature(\'TRANSIT\')">TRANSIT</md-button>\n        </md-card-actions>\n\n        <md-card-actions >\n          <md-button ng-click="displayFeature(\'DRIVING\')">DRIVING</md-button>\n        </md-card-actions>\n\n        <md-card-actions >\n          <md-button ng-click="displayFeature(\'BICYCLING\')">BICYCLING</md-button>\n        </md-card-actions>\n\n        <md-card-actions >\n          <md-button ng-click="displayFeature(\'WALKING\')">WALKING</md-button>\n        </md-card-actions>\n      </md-card-content>\n\n      <md-card-content ng-show="displayData" style="display:flex; justify-content:space-around; align-items:flex-start">\n        <div><p>Transportation: {{trans}}</p></div>\n        <div><p>Distance: {{dis}}</p></div>\n        <div><p>Time: {{totleTime}}</p></div>\n      </md-card-content>\n\n      <md-card-actions ng-show="mapp" layout="column" layout-align=" stretch">\n        <md-button ng-click="directionDisplay()">Direction</md-button>\n        <br>\n      </md-card-actions>\n      \n    </md-card>\n    ',
   binding: {
     data: '='
   },
@@ -402,6 +402,7 @@ angular.module('mapWidget').component('mapWidget', {
             return end;
           }).then(function (end) {
             GoogleMap.getDirectionData(end, currentAddress, 'DRIVING').then(function (datas) {
+              $scope.trans = 'DRIVING';
               $scope.totleTime = datas.duration;
               $scope.dis = datas.distance;
             });
@@ -453,8 +454,10 @@ angular.module('mapWidget').component('mapWidget', {
             return transportation;
           }).then(function (mode) {
             GoogleMap.getDirectionData(originAddress, currentAddress, mode).then(function (datas) {
+              console.log("LASTONEEEEEEEEE!!!!!!", datas);
               $scope.totleTime = datas.duration;
               $scope.dis = datas.distance;
+              $scope.trans = mode;
             });
           });
         });
@@ -843,7 +846,8 @@ angular.module('app.services', []).factory('Companies', function ($http) {
         //console.log('this is res DIRECTIONDATA from GoogleMapApi: ', res.data.routes[0].legs[0]);
         var directionDatas = {
           distance: res.data.routes[0].legs[0].distance.text,
-          duration: res.data.routes[0].legs[0].duration.text
+          duration: res.data.routes[0].legs[0].duration.text,
+          mode: mode
         };
         return directionDatas;
       }).catch(function (err) {

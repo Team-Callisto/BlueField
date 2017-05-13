@@ -603,31 +603,33 @@ angular.
 
       <md-card-content ng-show="displayData" layout="row" layout-align="center center">
         <md-card-actions >
-          <md-button ng-click="displayFeature('TRANSIT')">Bus</md-button>
+          <md-button ng-click="displayFeature('TRANSIT')">TRANSIT</md-button>
         </md-card-actions>
 
         <md-card-actions >
-          <md-button ng-click="displayFeature('DRIVING')">Car</md-button>
+          <md-button ng-click="displayFeature('DRIVING')">DRIVING</md-button>
         </md-card-actions>
 
         <md-card-actions >
-          <md-button ng-click="displayFeature('BICYCLING')">Bicycle</md-button>
+          <md-button ng-click="displayFeature('BICYCLING')">BICYCLING</md-button>
         </md-card-actions>
 
         <md-card-actions >
-          <md-button ng-click="displayFeature('WALKING')">Walk</md-button>
+          <md-button ng-click="displayFeature('WALKING')">WALKING</md-button>
         </md-card-actions>
       </md-card-content>
 
-      <md-card-content ng-show="displayData">
-        <p stype="float:left" layout="column" layout-align="center none">Distance: {{dis}}</p>
-        <p stype="float:left" layout="column" layout-align="center none">Time: {{totleTime}}</p>
+      <md-card-content ng-show="displayData" style="display:flex; justify-content:space-around; align-items:flex-start">
+        <div><p>Transportation: {{trans}}</p></div>
+        <div><p>Distance: {{dis}}</p></div>
+        <div><p>Time: {{totleTime}}</p></div>
       </md-card-content>
 
       <md-card-actions ng-show="mapp" layout="column" layout-align=" stretch">
         <md-button ng-click="directionDisplay()">Direction</md-button>
+        <br>
       </md-card-actions>
-      <br>
+      
     </md-card>
     `,
     binding: {
@@ -707,6 +709,7 @@ angular.
         .then(function(end) {
           GoogleMap.getDirectionData(end, currentAddress, 'DRIVING')
           .then(function(datas) {
+            $scope.trans = 'DRIVING';
             $scope.totleTime = datas.duration;
             $scope.dis = datas.distance;
           })
@@ -764,8 +767,10 @@ angular.
         .then(function(mode) {
           GoogleMap.getDirectionData(originAddress, currentAddress, mode)
           .then(function(datas) {
+            console.log("LASTONEEEEEEEEE!!!!!!", datas)
             $scope.totleTime = datas.duration;
             $scope.dis = datas.distance;
+            $scope.trans = mode;
           })
         })
 
@@ -1393,7 +1398,8 @@ angular.module('app.services', [])
 				//console.log('this is res DIRECTIONDATA from GoogleMapApi: ', res.data.routes[0].legs[0]);
 				var directionDatas = {
 					distance: res.data.routes[0].legs[0].distance.text,
-					duration: res.data.routes[0].legs[0].duration.text
+					duration: res.data.routes[0].legs[0].duration.text,
+					mode: mode
 				}
 				return directionDatas;
 			})
