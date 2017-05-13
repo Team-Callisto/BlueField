@@ -55,10 +55,17 @@ angular.
             <p class="md-subhead"><strong>Description: </strong>{{$ctrl.data.description}}</p>
             <p class="md-subhead"><strong>Founded: </strong>{{$ctrl.data.founded}}</p>
             <p class="md-subhead"><strong># of Employees: </strong>{{$ctrl.data.approxEmployees}}</p>
-            <p class="md-subhead"><strong>Featured Review: </strong></p><br><a href='https://www.glassdoor.com/index.htm'>powered by <img src='https://www.glassdoor.com/static/img/api/glassdoor_logo_80.png' title='Job Search' /></a>
-            <md-button ng-click="$ctrl.queryGlassdoor()">Submit</md-button>
+            <p class="md-subhead"><strong>Average Rating:{{averageRating}}</strong>
+            <br>
+            <strong>Pros:</strong>{{pros}}
+            <br>
+            <strong>Cons: </strong>{{cons}}
+            </p><br><a href='https://www.glassdoor.com/index.htm'>powered by <img src='https://www.glassdoor.com/static/img/api/glassdoor_logo_80.png' title='Job Search' /></a>
+            <md-button ng-click="$ctrl.queryGlassdoor()">Get Glassdoor Review!</md-button>
             <p class="md-subhead" ><strong>Address: </strong>{{$ctrl.data.address}}</p>
+
             <md-button ng-click="$ctrl.googleMap($ctrl.data.address, $ctrl.data.officialName)">Show Map</md-button>
+
 
             </md-content>
           </md-tab>
@@ -102,13 +109,15 @@ angular.
      data: '='
     },
 
-    controller: function($window, $scope, $route, $mdDialog, Jobs, GoogleMap, $rootScope) {
+
+  
 
       // favorite icon
 
 
 
 
+    controller: function($window, $scope, $http, $route, $mdDialog, Jobs, GoogleMap) {
 
       this.favorite = false;
 
@@ -154,9 +163,6 @@ angular.
       }
 
 
-
-
-      ////////////////////Google Map///////////////////////////////////////////
       this.googleMap = function(address, companyName) {
         $rootScope.displayMapFunc();
         $rootScope.getAddressData(address);
@@ -165,6 +171,7 @@ angular.
         window.scrollTo(0,400);
         GoogleMap.getLocationCode(address)
         .then(function(data){
+
           var mapProp = {
           center:data,
           zoom:12,
@@ -185,21 +192,36 @@ angular.
           console.log(err);
         })
       }
+
+
+      // function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+      //   infoWindow.setPosition(pos);
+      //   infoWindow.setContent(browserHasGeolocation ?
+      //                         'Error: The Geolocation service failed.' :
+      //                         'Error: Your browser doesn\'t support geolocation.');
+      // }
+
       this.queryGlassdoor = function(){
+
         $http({
           method: "POST",
           url: "/api/glassdoor",
           data : {
-            q : $scope.searchGlassdoor
+            q : this.data.company
           }
+          // console.log($scope.jobs[1].company)
         }).then(function(response){
-          console.log(response.data);
-          $scope.reviews = response.data;
-          // res.send(response.data);
+            // console.log('hello world');
+
+
+            let parsedBody = JSON.parse(response.data.body);
+
+            $scope.pros = parsedBody.response.employers[0].featuredReview.pros;
+            $scope.cons = parsedBody.response.employers[0].featuredReview.cons;
+            $scope.averageRating = parsedBody.response.employers[0].overallRating;
+
         })
       };
-
-
       this.editJob = function($event) {
         var parentEl = angular.element(document.body)
         $mdDialog.show({
