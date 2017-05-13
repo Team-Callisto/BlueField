@@ -12,7 +12,10 @@ angular.
         </md-card-header-text>
       </md-card-header>
       <md-card-content>
-        <p id="map" style="width: 800px; height: 600px"></p>
+        <p id="map" ng-show="mapp" style="width: 800px; height: 600px"></p>
+        <p id="directionsMap" ng-show="displayDirection" style="float:left;width: 400px; height: 600px"></p>
+        <p id="directionsPanel" ng-show="displayDirection" style="float:left;width: 400px; height: 600px"></p>
+
       </md-card-content>
       <md-card-actions layout="row" layout-align="end center">
         <md-button ng-click="directionDisplay()">Direction</md-button>
@@ -36,12 +39,22 @@ angular.
       $rootScope.getAddressData = function(address) {
         currentAddress = address;
       }
+
+      $rootScope.hideDisplayDirection = function() {
+        $scope.displayDirection = false;
+      }
+
+      $rootScope.hideDisplayMapp = function() {
+        $scope.mapp = true;
+      }
+
       
       $scope.directionDisplay = function() {
 
       directionsService = new google.maps.DirectionsService();
       directionsDisplay = new google.maps.DirectionsRenderer();
-
+      $scope.displayDirection = true;
+      $scope.mapp = false;
       if (navigator.geolocation) { 
         navigator.geolocation.getCurrentPosition(function (position) { 
         var coords = position.coords; 
@@ -58,14 +71,15 @@ angular.
             mapTypeId: google.maps.MapTypeId.ROADMAP,
             center: latlng
           }
-          map = new google.maps.Map(document.getElementById("map"), mapOptions);
+          map = new google.maps.Map(document.getElementById("directionsMap"), mapOptions);
           directionsDisplay.setMap(map);
+          directionsDisplay.setPanel(document.getElementById("directionsPanel"));
           return end;
         })
         .then(function(end) {
           var request = {
-            origin: currentAddress,
-            destination: end,
+            origin: end,
+            destination: currentAddress,
             travelMode: google.maps.TravelMode.DRIVING
           };
           directionsService.route(request, function(response, status) {

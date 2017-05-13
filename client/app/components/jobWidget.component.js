@@ -147,6 +147,8 @@ angular.
       this.googleMap = function(address, companyName) {
         $rootScope.displayMapFunc();
         $rootScope.getAddressData(address);
+        $rootScope.hideDisplayDirection();
+        $rootScope.hideDisplayMapp();
         window.scrollTo(0,400);
         GoogleMap.getLocationCode(address)
         .then(function(data){
